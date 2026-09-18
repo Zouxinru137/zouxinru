@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="邹欣茹的《高级网页设计》课堂实践目录">
+    <title>高级网页设计 · 邹欣茹的课堂实践</title>
+    <style>
+        :root {
+            --ink: #1b2832;
+            --muted: #68757d;
+            --paper: #f5f1e9;
+            --card: rgba(255, 255, 255, .82);
+            --line: #d8ded9;
+            --coral: #d65c42;
+            --green: #b7d5c4;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 8% 4%, rgba(214, 92, 66, .16), transparent 24rem),
+                radial-gradient(circle at 95% 18%, rgba(183, 213, 196, .55), transparent 27rem),
+                var(--paper);
+            font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+            line-height: 1.7;
+        }
+
+        a { color: inherit; }
+
+        .wrap { width: min(1100px, calc(100% - 36px)); margin: 0 auto; }
+
+        .topbar, .section-title, footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        header { min-height: 86vh; padding: 28px 0 64px; display: flex; flex-direction: column; justify-content: space-between; }
+
+        .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 14px "Microsoft YaHei", sans-serif; letter-spacing: .08em; }
+
+        .mark { width: 32px; height: 32px; display: grid; place-items: center; color: white; background: var(--coral); border-radius: 50% 50% 50% 8px; transform: rotate(-12deg); }
+
+        .edition, .kicker, .number, .tag, .link { font-family: "Microsoft YaHei", sans-serif; }
+        .edition { color: var(--muted); font-size: 12px; letter-spacing: .14em; }
+
+        .hero { max-width: 850px; padding-top: 50px; }
+        .kicker { margin: 0 0 16px; color: #a74130; font-size: 12px; font-weight: bold; letter-spacing: .16em; text-transform: uppercase; }
+        h1 { margin: 0; font-size: clamp(3.2rem, 8vw, 7rem); line-height: .98; letter-spacing: -.06em; }
+        .hero-text { max-width: 540px; margin: 28px 0 0; color: var(--muted); font-size: 18px; }
+        .jump { display: inline-flex; align-items: center; gap: 10px; margin-top: 38px; text-decoration: none; font: 700 13px "Microsoft YaHei", sans-serif; }
+        .jump span { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--ink); border-radius: 50%; }
+
+        main { padding-bottom: 90px; }
+        section { padding: 58px 0; }
+        .section-title { align-items: end; margin-bottom: 26px; }
+        .section-title h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
+        .section-title p:last-child { max-width: 330px; margin: 0; color: var(--muted); font-size: 14px; text-align: right; }
+
+        .directory { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+        .lesson { min-height: 270px; grid-column: span 6; display: flex; flex-direction: column; justify-content: space-between; padding: 28px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 20px 48px rgba(44, 57, 51, .11); transition: transform .25s, border-color .25s; }
+        .lesson:hover { transform: translateY(-5px); border-color: var(--coral); }
+        .lesson.future { background: rgba(226, 235, 229, .55); box-shadow: none; }
+        .number { color: var(--coral); font-size: 13px; font-weight: bold; letter-spacing: .12em; }
+        .lesson h3 { margin: 34px 0 8px; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.1; }
+        .lesson p { max-width: 380px; margin: 0; color: var(--muted); font-size: 14px; }
+        .lesson-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; }
+        .tag { color: var(--muted); font-size: 12px; }
+        .link { color: #a74130; font-size: 13px; font-weight: bold; text-decoration: none; }
+        .link::after { content: "  →"; }
+
+        .prompt { display: grid; grid-template-columns: 1fr 2fr; gap: 36px; padding: 32px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+        .prompt h3 { margin: 0; font-size: 1.5rem; }
+        blockquote { margin: 0; color: #46535a; font-size: 15px; }
+        footer { padding: 24px 0 38px; color: var(--muted); border-top: 1px solid var(--line); font: 12px "Microsoft YaHei", sans-serif; }
+
+        @media (max-width: 700px) {
+            .wrap { width: min(100% - 28px, 1100px); }
+            header { min-height: 82vh; padding-top: 18px; }
+            .edition { display: none; }
+            .hero { padding-top: 48px; }
+            .hero-text { font-size: 16px; }
+            .section-title { display: block; }
+            .section-title p:last-child { margin-top: 14px; text-align: left; }
+            .lesson { grid-column: 1 / -1; min-height: 235px; padding: 22px; }
+            .prompt { display: block; padding: 26px 0; }
+            blockquote { margin-top: 20px; }
+            footer { align-items: flex-start; flex-direction: column; gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <div class="topbar">
+                <a class="brand" href="./index.html" aria-label="返回课堂实践首页"><span class="mark">Z</span><span>邹欣茹 / WEB LAB</span></a>
+                <span class="edition">高级网页设计 · 课堂实践</span>
+            </div>
+            <div class="hero">
+                <p class="kicker">Classroom practice / 2026</p>
+                <h1>高级网页<br>设计实践集</h1>
+                <p class="hero-text">一页一练习，把课堂里的布局、图标和视觉表达，整理成一份持续生长的网页档案。</p>
+                <a class="jump" href="#directory"><span>↓</span>浏览课堂目录</a>
+            </div>
+        </header>
+
+        <main>
+            <section id="directory" aria-labelledby="directory-title">
+                <div class="section-title">
+                    <div><p class="kicker">01 / Directory</p><h2 id="directory-title">课堂目录</h2></div>
+                    <p>已完成的练习可以直接进入，新的模块会继续加入这里。</p>
+                </div>
+                <div class="directory">
+                    <article class="lesson">
+                        <div><span class="number">练习 01</span><h3>Flex 复习</h3><p>用弹性布局重新理解排列、对齐与空间分配，为后续页面搭建打好基础。</p></div>
+                        <div class="lesson-foot"><span class="tag">布局基础 · 待补充</span><span class="link">即将加入</span></div>
+                    </article>
+                    <article class="lesson">
+                        <div><span class="number">练习 02</span><h3>字体图标</h3><p>探索图标在导航与交互中的表达方式，练习使用图形符号建立视觉秩序。</p></div>
+                        <div class="lesson-foot"><span class="tag">SVG 图标 · 已完成</span><a class="link" href="./1.html">打开页面</a></div>
+                    </article>
+                    <article class="lesson future">
+                        <div><span class="number">练习 03</span><h3>其余模块</h3><p>这里为之后的课堂实践保留位置，新的页面完成后会在目录中持续增加。</p></div>
+                        <div class="lesson-foot"><span class="tag">持续更新</span><span class="link">Coming soon</span></div>
+                    </article>
+                </div>
+            </section>
+
+            <section aria-labelledby="prompt-title">
+                <div class="section-title"><div><p class="kicker">02 / Brief</p><h2 id="prompt-title">实践说明</h2></div></div>
+                <div class="prompt">
+                    <h3>本页面的创作提示词</h3>
+                    <blockquote>“创建一个新页面,包括本目录下的所有网页的超链接,使用原生代码，不使用cdn，新页面名称为index.html，主题为邹欣茹的《高级网页设计》课堂实践，美化页面，课堂目录中包含flex复习、字体图标、其余模块后续在增加。页面中包括本提示词。”</blockquote>
+                </div>
+            </section>
+        </main>
+
+        <footer><span>邹欣茹的《高级网页设计》</span><span>课堂实践档案 · 01</span></footer>
+    </div>
+</body>
+</html>

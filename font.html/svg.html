@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>svg图标</title>
+    <script src="https://at.alicdn.com/t/c/font_5232908_9zrtwj3gmg.js"></script>
+    <style>
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+            font-size: 32px;
+        }
+        .tab-nav {
+            display: flex;
+            gap: 20px;
+        }
+        .tab-item {
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color:#666;
+        }
+        .tab-item.active {
+            color:#007fff;
+        }
+    </style>
+</head>
+<body>
+    <h3>svg图标</h3>
+    <div class="tab-nav">
+        <class="tab-item active" onclick="changeTab(this)">
+            <svg class="icon" aria-hidden="true">
+               <use href="#icon-gongwenbao"></use>
+            </svg>
+                <span>公文包</span>
+            <!--div.budge-dot回车-->
+            <!--红点-->
+        </div>
+        <div class="tab-item" onclick="changeTab(this)">
+            <svg class="icon" aria-hidden="true">
+               <use href="#icon-dengpao"></use>
+            </svg>
+                <span>灯泡</span>
+                <!--数字红点-->
+        </div>
+        <div class="tab-item" onclick="changeTab(this)">
+            <svg class="icon" aria-hidden="true">
+               <use href="#icon-a-ziyuan253"></use>
+            </svg>
+                <span>资源253</span>
+                <div class="budge-border" id='nudge-shoppingcar'></div>
+        </div>        
+        <div class="tab-item"  onclick="changeTab(this)">
+            <svg class="icon" aria-hidden="true">
+               <use href="#icon-niuyouguo"></use>
+            </svg>
+                <span>牛油果</span>
+                <div class='budge-dot max'>100+</div>
+        </div>                
+    </div>
+    <script>
+        function changeTab(current){
+            let tabs = document.querySelectorAll('.tab-item');
+            for(let i = 0; i < tabs.length; i++){
+                tabs[i].classList.remove('active');
+            }
+            current.classList.add('active');
+        }
+    </script>
+</body>
+</html>
