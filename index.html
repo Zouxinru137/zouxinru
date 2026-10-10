@@ -65,9 +65,21 @@
         .section-title p:last-child { max-width: 330px; margin: 0; color: var(--muted); font-size: 14px; text-align: right; }
 
         .directory { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-        .lesson { min-height: 270px; grid-column: span 6; display: flex; flex-direction: column; justify-content: space-between; padding: 28px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 20px 48px rgba(44, 57, 51, .11); transition: transform .25s, border-color .25s; }
+        .lesson {
+            min-height: 270px;
+            grid-column: span 6;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 28px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            box-shadow: 0 20px 48px rgba(44, 57, 51, .11);
+            transition: transform .25s, border-color .25s;
+            cursor: pointer; /* 鼠标悬浮变成小手！！ */
+        }
         .lesson:hover { transform: translateY(-5px); border-color: var(--coral); }
-        .lesson.future { background: rgba(226, 235, 229, .55); box-shadow: none; }
+        .lesson.future { background: rgba(226, 235, 229, .55); box-shadow: none; cursor:default; }
         .number { color: var(--coral); font-size: 13px; font-weight: bold; letter-spacing: .12em; }
         .lesson h3 { margin: 34px 0 8px; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.1; }
         .lesson p { max-width: 380px; margin: 0; color: var(--muted); font-size: 14px; }
@@ -118,14 +130,17 @@
                     <p>已完成的练习可以直接进入，新的模块会继续加入这里。</p>
                 </div>
                 <div class="directory">
-                    <article class="lesson">
+                    <!-- 练习01 Flex复习，用onclick跳转 -->
+                    <article class="lesson" onclick="location.href='./review_flex.html'">
                         <div><span class="number">练习 01</span><h3>Flex 复习</h3><p>用弹性布局重新理解排列、对齐与空间分配，为后续页面搭建打好基础。</p></div>
                         <div class="lesson-foot"><span class="tag">布局基础 · 待补充</span><span class="link">即将加入</span></div>
                     </article>
-                    <article class="lesson">
+                    <!-- 练习02 字体图标 -->
+                    <article class="lesson" onclick="location.href='./svg.html'">
                         <div><span class="number">练习 02</span><h3>字体图标</h3><p>探索图标在导航与交互中的表达方式，练习使用图形符号建立视觉秩序。</p></div>
-                        <div class="lesson-foot"><span class="tag">SVG 图标 · 已完成</span><a class="link" href="./1.html">打开页面</a></div>
+                        <div class="lesson-foot"><span class="tag">SVG 图标 · 已完成</span><span class="link">打开页面</span></div>
                     </article>
+                    <!-- 练习03 无点击 -->
                     <article class="lesson future">
                         <div><span class="number">练习 03</span><h3>其余模块</h3><p>这里为之后的课堂实践保留位置，新的页面完成后会在目录中持续增加。</p></div>
                         <div class="lesson-foot"><span class="tag">持续更新</span><span class="link">Coming soon</span></div>
