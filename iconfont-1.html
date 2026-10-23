@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="图标工坊第一章「墨」：以字体图标方式展示 Font Awesome 图标，艺术品牌风格页面">
+    <title>图标工坊 · 第一章 墨 — Font Awesome 字体图标</title>
+    <!-- 本地图标字体库：cdn/fontawesome（字体图标方式） -->
+    <link rel="stylesheet" href="cdn/fontawesome/css/all.min.css">
+    <style>
+        :root {
+            --zxr_ink: #10171d;
+            --zxr_ink2: #16212a;
+            --zxr_paper: #f5f1e9;
+            --zxr_coral: #d65c42;
+            --zxr_gold: #d9a441;
+            --zxr_muted: #8fa0a8;
+            --zxr_line: rgba(245, 241, 233, .14);
+            --zxr_icon_size: 30px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            color: var(--zxr_paper);
+            background:
+                radial-gradient(circle at 85% 8%, rgba(214, 92, 66, .14), transparent 30rem),
+                radial-gradient(circle at 5% 90%, rgba(217, 164, 65, .08), transparent 26rem),
+                var(--zxr_ink);
+            font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; }
+
+        /* ===== 顶栏品牌 ===== */
+        .zxr_topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 22px 0;
+        }
+
+        .zxr_brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font: 700 14px "Microsoft YaHei", sans-serif;
+            letter-spacing: .08em;
+        }
+
+        .zxr_mark {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            color: var(--zxr_ink);
+            background: var(--zxr_paper);
+            border-radius: 50% 50% 50% 8px;
+            transform: rotate(-12deg);
+        }
+
+        .zxr_edition { color: var(--zxr_muted); font-size: 12px; letter-spacing: .14em; font-family: "Microsoft YaHei", sans-serif; }
+
+        /* ===== 英雄区 ===== */
+        .zxr_hero {
+            position: relative;
+            min-height: 86vh;
+            padding: 0 0 70px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .zxr_hero_main { position: relative; z-index: 2; margin-top: auto; padding-top: 46px; max-width: 860px; }
+
+        .zxr_kicker {
+            margin: 0 0 18px;
+            color: var(--zxr_gold);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .zxr_title { position: relative; margin: 0; line-height: .92; }
+
+        .zxr_hanzi {
+            position: relative;
+            z-index: 2;
+            display: block;
+            font-family: "SimSun", "Songti SC", "STSong", serif;
+            font-size: clamp(7.5rem, 21vw, 17rem);
+            line-height: 1;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--zxr_paper);
+            letter-spacing: -.02em;
+        }
+
+        .zxr_hanzi::after {
+            content: "";
+            position: absolute;
+            right: -.55em;
+            top: .16em;
+            width: .22em;
+            height: .22em;
+            background: var(--zxr_coral);
+            border-radius: 50%;
+        }
+
+        .zxr_ghost {
+            position: absolute;
+            z-index: 1;
+            left: .9rem;
+            bottom: -.28em;
+            font-family: Georgia, serif;
+            font-weight: 700;
+            font-size: clamp(4rem, 11.5vw, 9.5rem);
+            line-height: .95;
+            letter-spacing: -.04em;
+            color: rgba(245, 241, 233, .07);
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .zxr_lede { max-width: 560px; margin: 30px 0 0; color: var(--zxr_muted); font-size: 17px; }
+
+        .zxr_cta_row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 36px; }
+
+        .zxr_btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            background: var(--zxr_coral);
+            color: var(--zxr_ink);
+            border: 1px solid var(--zxr_coral);
+            border-radius: 999px;
+            text-decoration: none;
+            font: 700 13px "Microsoft YaHei", sans-serif;
+            letter-spacing: .06em;
+            transition: transform .22s, background .22s, color .22s;
+        }
+
+        .zxr_btn:hover { transform: translateY(-3px); background: var(--zxr_paper); border-color: var(--zxr_paper); }
+
+        .zxr_btn_ghost { background: transparent; color: var(--zxr_paper); border-color: var(--zxr_line); }
+
+        .zxr_btn_ghost:hover { background: transparent; border-color: var(--zxr_paper); color: var(--zxr_gold); }
+
+        /* 印章与竖排注 */
+        .zxr_seal {
+            position: absolute;
+            top: 24vh;
+            right: 6vw;
+            z-index: 3;
+            width: 74px;
+            height: 74px;
+            display: grid;
+            place-items: center;
+            background: #c8452c;
+            color: var(--zxr_paper);
+            font-family: "SimSun", "Songti SC", serif;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            line-height: 1.15;
+            writing-mode: vertical-rl;
+            border-radius: 6px;
+            transform: rotate(6deg);
+            box-shadow: 0 12px 30px rgba(200, 69, 44, .35);
+        }
+
+        .zxr_side_note {
+            position: fixed;
+            right: 26px;
+            bottom: 90px;
+            margin: 0;
+            writing-mode: vertical-rl;
+            color: rgba(245, 241, 233, .34);
+            font-size: 12px;
+            letter-spacing: .5em;
+            font-family: "SimSun", "Songti SC", serif;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        /* ===== 跑马灯 ===== */
+        .zxr_ticker { border-top: 1px solid var(--zxr_line); border-bottom: 1px solid var(--zxr_line); overflow: hidden; }
+
+        .zxr_ticker_inner { display: flex; width: max-content; animation: zxr_scroll 26s linear infinite; }
+
+        .zxr_ticker_seq { display: flex; align-items: center; white-space: nowrap; padding: 13px 0; }
+
+        .zxr_ticker_seq span { color: var(--zxr_muted); font-size: 13px; letter-spacing: .22em; font-family: "Microsoft YaHei", sans-serif; }
+
+        .zxr_ticker_seq i { color: var(--zxr_coral); font-size: 10px; margin: 0 26px; }
+
+        @keyframes zxr_scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* ===== 主体分区 ===== */
+        .zxr_wrap { width: min(1100px, calc(100% - 36px)); margin: 0 auto; }
+
+        .zxr_section { padding: 74px 0 0; }
+
+        .zxr_section_head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 30px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--zxr_line);
+        }
+
+        .zxr_section_head h2 { margin: 0; font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -.03em; }
+
+        .zxr_section_no { color: var(--zxr_coral); font: 700 13px "Microsoft YaHei", sans-serif; letter-spacing: .14em; }
+
+        .zxr_section_desc { max-width: 360px; margin: 0; color: var(--zxr_muted); font-size: 14px; text-align: right; }
+
+        /* 字号阶梯 */
+        .zxr_ladder {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 26px;
+            padding: 34px 28px;
+            background: var(--zxr_ink2);
+            border: 1px solid var(--zxr_line);
+        }
+
+        .zxr_step { display: grid; justify-items: center; gap: 10px; }
+
+        .zxr_step i { color: var(--zxr_paper); transition: color .25s; }
+
+        .zxr_step:hover i { color: var(--zxr_gold); }
+
+        .zxr_step b { color: var(--zxr_muted); font: 400 11px "Microsoft YaHei", sans-serif; letter-spacing: .12em; }
+
+        /* 图鉴网格 */
+        .zxr_toolrow { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; }
+
+        .zxr_toolrow label { color: var(--zxr_muted); font: 600 13px "Microsoft YaHei", sans-serif; letter-spacing: .06em; }
+
+        .zxr_range {
+            flex: 1;
+            max-width: 320px;
+            accent-color: var(--zxr_coral);
+            background: transparent;
+        }
+
+        .zxr_tool_val { color: var(--zxr_gold); font: 700 13px Georgia, serif; min-width: 52px; }
+
+        .zxr_gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+            gap: 14px;
+        }
+
+        .zxr_card {
+            position: relative;
+            display: grid;
+            justify-items: center;
+            gap: 12px;
+            padding: 26px 14px 18px;
+            background: var(--zxr_ink2);
+            border: 1px solid var(--zxr_line);
+            color: var(--zxr_paper);
+            cursor: pointer;
+            transition: transform .22s, border-color .22s;
+        }
+
+        .zxr_card i { font-size: var(--zxr_icon_size); transition: color .22s, transform .22s; }
+
+        .zxr_card:hover { transform: translateY(-5px); border-color: var(--zxr_coral); }
+
+        .zxr_card:hover i { color: var(--zxr_coral); transform: scale(1.12); }
+
+        .zxr_card_no { position: absolute; top: 10px; left: 12px; color: var(--zxr_gold); font: 400 11px Georgia, serif; letter-spacing: .1em; }
+
+        .zxr_card_name { color: var(--zxr_muted); font: 400 12px "Microsoft YaHei", sans-serif; letter-spacing: .04em; word-break: break-all; text-align: center; }
+
+        .zxr_card_hint { color: rgba(245, 241, 233, .3); font: 400 10px "Microsoft YaHei", sans-serif; letter-spacing: .1em; }
+
+        /* 动效舞台 */
+        .zxr_motion_grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+
+        .zxr_motion_card {
+            display: grid;
+            justify-items: center;
+            gap: 14px;
+            padding: 30px 14px 20px;
+            border: 1px dashed var(--zxr_line);
+            transition: border-color .22s, background .22s;
+        }
+
+        .zxr_motion_card i { font-size: 34px; color: var(--zxr_paper); }
+
+        .zxr_motion_card:hover { border-color: var(--zxr_gold); background: rgba(217, 164, 65, .05); }
+
+        .zxr_motion_card:hover i { animation-play-state: paused; }
+
+        .zxr_motion_card b { color: var(--zxr_muted); font: 600 12px "Microsoft YaHei", sans-serif; letter-spacing: .1em; }
+
+        /* 叠加组合 */
+        .zxr_stack_row { display: flex; flex-wrap: wrap; gap: 40px; padding: 30px 28px; background: var(--zxr_ink2); border: 1px solid var(--zxr_line); }
+
+        .zxr_stack_item { display: grid; justify-items: center; gap: 12px; }
+
+        .zxr_stack_item .zxr_stack_cap { color: var(--zxr_muted); font: 400 12px "Microsoft YaHei", sans-serif; letter-spacing: .08em; }
+
+        .zxr_stack_item .fa-stack { font-size: 26px; }
+
+        /* 原理与代码 */
+        .zxr_note_grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 36px; }
+
+        .zxr_note p { margin: 0 0 14px; color: var(--zxr_muted); font-size: 15px; }
+
+        .zxr_note strong { color: var(--zxr_paper); }
+
+        .zxr_code {
+            margin: 0;
+            padding: 24px;
+            background: #0b1015;
+            border: 1px solid var(--zxr_line);
+            color: #cfe0d8;
+            font: 13px/1.8 Consolas, "Courier New", monospace;
+            overflow-x: auto;
+        }
+
+        .zxr_code .zxr_tag { color: var(--zxr_coral); }
+
+        .zxr_code .zxr_cls { color: var(--zxr_gold); }
+
+        /* ===== 页脚 ===== */
+        .zxr_footer {
+            margin-top: 90px;
+            padding: 26px 0 40px;
+            border-top: 1px solid var(--zxr_line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            color: var(--zxr_muted);
+            font: 12px "Microsoft YaHei", sans-serif;
+            letter-spacing: .06em;
+        }
+
+        .zxr_footer a { color: var(--zxr_paper); text-decoration: none; border-bottom: 1px solid var(--zxr_coral); padding-bottom: 2px; }
+
+        .zxr_footer a:hover { color: var(--zxr_gold); }
+
+        .zxr_chapter_nav { display: flex; gap: 20px; }
+
+        /* 复制提示 */
+        .zxr_toast {
+            position: fixed;
+            left: 50%;
+            bottom: 34px;
+            transform: translate(-50%, 20px);
+            padding: 10px 22px;
+            background: var(--zxr_coral);
+            color: var(--zxr_ink);
+            font: 700 13px "Microsoft YaHei", sans-serif;
+            border-radius: 999px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s, transform .25s;
+            z-index: 20;
+        }
+
+        .zxr_toast.zxr_show { opacity: 1; transform: translate(-50%, 0); }
+
+        @media (max-width: 760px) {
+            .zxr_hero { min-height: 78vh; }
+            .zxr_seal { top: 16vh; right: 5vw; width: 58px; height: 58px; font-size: 20px; }
+            .zxr_side_note { display: none; }
+            .zxr_section_head { flex-direction: column; align-items: flex-start; }
+            .zxr_section_desc { text-align: left; }
+            .zxr_note_grid { grid-template-columns: 1fr; }
+            .zxr_ladder { justify-content: center; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .zxr_ticker_inner { animation: none; }
+            .zxr_card, .zxr_btn { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="zxr_wrap">
+        <!-- 英雄区 -->
+        <header class="zxr_hero">
+            <nav class="zxr_topbar">
+                <a class="zxr_brand" href="index.html" aria-label="返回课堂实践首页"><span class="zxr_mark">Z</span><span>邹欣茹 / 图标工坊</span></a>
+                <span class="zxr_edition">高级网页设计 · 练习 07</span>
+            </nav>
+            <div class="zxr_hero_main">
+                <p class="zxr_kicker">Chapter I / 字体图标 · Font Icon</p>
+                <h1 class="zxr_title">
+                    <span class="zxr_hanzi">墨</span>
+                    <span class="zxr_ghost" aria-hidden="true">FONT AWESOME</span>
+                </h1>
+                <p class="zxr_lede">以字体为墨，以码位为字。字体图标把每个图形收进一套字体里，一个 <em>&lt;i&gt;</em> 标签便是落笔之处——大小随字号，颜色随 color，动效随 CSS。</p>
+                <div class="zxr_cta_row">
+                    <a class="zxr_btn" href="#zxr_gallery_sec">浏览图鉴 <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                    <a class="zxr_btn zxr_btn_ghost" href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i> 返回首页</a>
+                </div>
+            </div>
+            <div class="zxr_seal" aria-hidden="true">邹印</div>
+        </header>
+    </div>
+
+    <p class="zxr_side_note" aria-hidden="true">字体图标 · 第一章 · 墨</p>
+
+    <!-- 跑马灯 -->
+    <div class="zxr_ticker" aria-hidden="true">
+        <div class="zxr_ticker_inner">
+            <div class="zxr_ticker_seq">
+                <span>FONT AWESOME 6</span><i class="fa-solid fa-asterisk"></i>
+                <span>字体即图形</span><i class="fa-solid fa-asterisk"></i>
+                <span>@FONT-FACE</span><i class="fa-solid fa-asterisk"></i>
+                <span>码位造形</span><i class="fa-solid fa-asterisk"></i>
+                <span>CSS 上色</span><i class="fa-solid fa-asterisk"></i>
+                <span>ZXR ATELIER</span><i class="fa-solid fa-asterisk"></i>
+            </div>
+            <div class="zxr_ticker_seq">
+                <span>FONT AWESOME 6</span><i class="fa-solid fa-asterisk"></i>
+                <span>字体即图形</span><i class="fa-solid fa-asterisk"></i>
+                <span>@FONT-FACE</span><i class="fa-solid fa-asterisk"></i>
+                <span>码位造形</span><i class="fa-solid fa-asterisk"></i>
+                <span>CSS 上色</span><i class="fa-solid fa-asterisk"></i>
+                <span>ZXR ATELIER</span><i class="fa-solid fa-asterisk"></i>
+            </div>
+        </div>
+    </div>
+
+    <main class="zxr_wrap">
+        <!-- 一、字号阶梯 -->
+        <section class="zxr_section" aria-labelledby="zxr_h_ladder">
+            <div class="zxr_section_head">
+                <div>
+                    <p class="zxr_section_no">壹 / SCALE</p>
+                    <h2 id="zxr_h_ladder">字号阶梯</h2>
+                </div>
+                <p class="zxr_section_desc">字体图标生在字体里，font-size 即图形尺寸，一脉相承、随字而变。</p>
+            </div>
+            <div class="zxr_ladder">
+                <span class="zxr_step"><i class="fa-solid fa-feather" style="font-size:14px" aria-hidden="true"></i><b>14 px</b></span>
+                <span class="zxr_step"><i class="fa-solid fa-feather" style="font-size:20px" aria-hidden="true"></i><b>20 px</b></span>
+                <span class="zxr_step"><i class="fa-solid fa-feather" style="font-size:28px" aria-hidden="true"></i><b>28 px</b></span>
+                <span class="zxr_step"><i class="fa-solid fa-feather" style="font-size:40px" aria-hidden="true"></i><b>40 px</b></span>
+                <span class="zxr_step"><i class="fa-solid fa-feather" style="font-size:56px" aria-hidden="true"></i><b>56 px</b></span>
+                <span class="zxr_step"><i class="fa-solid fa-feather" style="font-size:76px" aria-hidden="true"></i><b>76 px</b></span>
+            </div>
+        </section>
+
+        <!-- 二、图鉴 -->
+        <section class="zxr_section" id="zxr_gallery_sec" aria-labelledby="zxr_h_gallery">
+            <div class="zxr_section_head">
+                <div>
+                    <p class="zxr_section_no">贰 / GALLERY</p>
+                    <h2 id="zxr_h_gallery">图标图鉴</h2>
+                </div>
+                <p class="zxr_section_desc">拖动滑杆，整套图鉴随 font-size 一起伸缩；点击任意图标即可复制它的类名。</p>
+            </div>
+            <div class="zxr_toolrow">
+                <label for="zxr_size_range">图鉴字号</label>
+                <input class="zxr_range" type="range" id="zxr_size_range" min="18" max="60" value="30" step="1">
+                <span class="zxr_tool_val" id="zxr_size_val">30 px</span>
+            </div>
+            <div class="zxr_gallery" id="zxr_gallery"></div>
+        </section>
+
+        <!-- 三、动效舞台 -->
+        <section class="zxr_section" aria-labelledby="zxr_h_motion">
+            <div class="zxr_section_head">
+                <div>
+                    <p class="zxr_section_no">叁 / MOTION</p>
+                    <h2 id="zxr_h_motion">动效舞台</h2>
+                </div>
+                <p class="zxr_section_desc">官方内置的 CSS 动画类，悬停即可让它们停下来歇口气。</p>
+            </div>
+            <div class="zxr_motion_grid">
+                <div class="zxr_motion_card"><i class="fa-solid fa-compass fa-spin" aria-hidden="true"></i><b>fa-spin</b></div>
+                <div class="zxr_motion_card"><i class="fa-solid fa-heart fa-beat" aria-hidden="true"></i><b>fa-beat</b></div>
+                <div class="zxr_motion_card"><i class="fa-solid fa-basketball fa-bounce" aria-hidden="true"></i><b>fa-bounce</b></div>
+                <div class="zxr_motion_card"><i class="fa-solid fa-ghost fa-fade" aria-hidden="true"></i><b>fa-fade</b></div>
+                <div class="zxr_motion_card"><i class="fa-solid fa-star fa-flip" aria-hidden="true"></i><b>fa-flip</b></div>
+                <div class="zxr_motion_card"><i class="fa-solid fa-bell fa-shake" aria-hidden="true"></i><b>fa-shake</b></div>
+            </div>
+        </section>
+
+        <!-- 四、叠加组合 -->
+        <section class="zxr_section" aria-labelledby="zxr_h_stack">
+            <div class="zxr_section_head">
+                <div>
+                    <p class="zxr_section_no">肆 / STACK</p>
+                    <h2 id="zxr_h_stack">叠加组合</h2>
+                </div>
+                <p class="zxr_section_desc">fa-stack 让两枚字体图标同纸叠印，如同版画的一版两色。</p>
+            </div>
+            <div class="zxr_stack_row">
+                <span class="zxr_stack_item">
+                    <span class="fa-stack" aria-hidden="true">
+                        <i class="fa-solid fa-circle fa-stack-2x" style="color:#d65c42"></i>
+                        <i class="fa-solid fa-camera fa-stack-1x" style="color:#10171d"></i>
+                    </span>
+                    <span class="zxr_stack_cap">相机 · 朱底墨形</span>
+                </span>
+                <span class="zxr_stack_item">
+                    <span class="fa-stack" aria-hidden="true">
+                        <i class="fa-solid fa-square fa-stack-2x" style="color:#d9a441"></i>
+                        <i class="fa-solid fa-music fa-stack-1x fa-inverse" style="color:#10171d"></i>
+                    </span>
+                    <span class="zxr_stack_cap">音律 · 金底墨形</span>
+                </span>
+                <span class="zxr_stack_item">
+                    <span class="fa-stack" aria-hidden="true">
+                        <i class="fa-solid fa-circle fa-stack-2x" style="color:#2c3a44"></i>
+                        <i class="fa-solid fa-feather fa-stack-1x" style="color:#f5f1e9"></i>
+                    </span>
+                    <span class="zxr_stack_cap">羽笔 · 黛底素形</span>
+                </span>
+                <span class="zxr_stack_item">
+                    <span class="fa-stack" aria-hidden="true">
+                        <i class="fa-regular fa-circle fa-stack-2x" style="color:#f5f1e9"></i>
+                        <i class="fa-solid fa-star fa-stack-1x" style="color:#d65c42"></i>
+                    </span>
+                    <span class="zxr_stack_cap">星徽 · 素圈朱星</span>
+                </span>
+            </div>
+        </section>
+
+        <!-- 五、原理笔记 -->
+        <section class="zxr_section" aria-labelledby="zxr_h_note">
+            <div class="zxr_section_head">
+                <div>
+                    <p class="zxr_section_no">伍 / NOTES</p>
+                    <h2 id="zxr_h_note">原理笔记</h2>
+                </div>
+            </div>
+            <div class="zxr_note_grid">
+                <div class="zxr_note">
+                    <p><strong>字体图标的本质：</strong>图标库提供一套 <strong>@font-face</strong> 声明的字体文件（woff2/ttf），每个图标占用一个私有码位。</p>
+                    <p><strong>渲染方式：</strong>类名通过伪元素 <strong>::before</strong> 写入对应的 content 码位，浏览器按字体字形把"字符"画成图形。</p>
+                    <p><strong>本页所用字体文件</strong>已下载到 cdn/fontawesome 目录，离线可用：fa-solid-900、fa-regular-400、fa-brands-400。</p>
+                </div>
+                <pre class="zxr_code"><code>&lt;<span class="zxr_tag">link</span> rel=<span class="zxr_cls">"stylesheet"</span> href=<span class="zxr_cls">"cdn/fontawesome/css/all.min.css"</span>&gt;
+
+&lt;<span class="zxr_tag">i</span> <span class="zxr_cls">class="fa-solid fa-anchor"</span>&gt;&lt;/<span class="zxr_tag">i</span&gt;
+&lt;<span class="zxr_tag">i</span> <span class="zxr_cls">class="fa-solid fa-heart fa-beat"</span>&gt;&lt;/<span class="zxr_tag">i</span&gt;
+
+<span style="color:#5c6f66">/* 字体图标随字号、颜色而变 */</span>
+<span class="zxr_tag">i</span> { <span class="zxr_cls">font-size</span>: 30px; <span class="zxr_cls">color</span>: #d65c42; }</code></pre>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="zxr_footer">
+            <span>邹欣茹的《高级网页设计》· 图标工坊</span>
+            <span class="zxr_chapter_nav">
+                <a href="index.html">← 返回首页</a>
+                <a href="iconfont-2.html">下一章 · 素（Lucide SVG）→</a>
+            </span>
+        </footer>
+    </main>
+
+    <div class="zxr_toast" id="zxr_toast" role="status">已复制类名</div>
+
+    <script>
+        // 图鉴数据：Font Awesome 6 免费版 solid 图标名
+        var zxrFaIcons = [
+            'anchor', 'palette', 'feather', 'music', 'heart', 'star',
+            'moon', 'fire', 'bolt', 'leaf', 'gem', 'crown',
+            'paintbrush', 'pen-nib', 'compass', 'film', 'headphones', 'guitar',
+            'rocket', 'earth-asia', 'paper-plane', 'eye', 'fingerprint', 'camera',
+            'wand-magic-sparkles', 'hourglass-half', 'chess-knight', 'umbrella-beach',
+            'mountain-sun', 'water', 'snowflake', 'seedling', 'dove', 'dragon'
+        ];
+
+        var zxrGallery = document.getElementById('zxr_gallery');
+
+        // 生成图鉴卡片，点击复制类名
+        zxrFaIcons.forEach(function (zxrName, zxrI) {
+            var zxrCard = document.createElement('button');
+            zxrCard.type = 'button';
+            zxrCard.className = 'zxr_card';
+            zxrCard.setAttribute('aria-label', '复制图标类名 fa-solid fa-' + zxrName);
+            zxrCard.innerHTML =
+                '<span class="zxr_card_no">' + String(zxrI + 1).padStart(2, '0') + '</span>' +
+                '<i class="fa-solid fa-' + zxrName + '" aria-hidden="true"></i>' +
+                '<span class="zxr_card_name">fa-' + zxrName + '</span>' +
+                '<span class="zxr_card_hint">点击复制类名</span>';
+            zxrCard.addEventListener('click', function () {
+                zxrCopyText('fa-solid fa-' + zxrName, '已复制类名');
+            });
+            zxrGallery.appendChild(zxrCard);
+        });
+
+        // 图鉴字号滑杆：字体图标随 font-size 缩放
+        var zxrSizeRange = document.getElementById('zxr_size_range');
+        var zxrSizeVal = document.getElementById('zxr_size_val');
+        zxrSizeRange.addEventListener('input', function () {
+            document.documentElement.style.setProperty('--zxr_icon_size', zxrSizeRange.value + 'px');
+            zxrSizeVal.textContent = zxrSizeRange.value + ' px';
+        });
+
+        // 复制文本 + 提示气泡
+        var zxrToast = document.getElementById('zxr_toast');
+        var zxrToastTimer = null;
+
+        function zxrCopyText(zxrText, zxrMsg) {
+            function zxrDone() {
+                zxrToast.textContent = zxrMsg;
+                zxrToast.classList.add('zxr_show');
+                clearTimeout(zxrToastTimer);
+                zxrToastTimer = setTimeout(function () {
+                    zxrToast.classList.remove('zxr_show');
+                }, 1600);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(zxrText).then(zxrDone);
+            } else {
+                var zxrTa = document.createElement('textarea');
+                zxrTa.value = zxrText;
+                document.body.appendChild(zxrTa);
+                zxrTa.select();
+                document.execCommand('copy');
+                document.body.removeChild(zxrTa);
+                zxrDone();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#10171d">
+    <meta name="description" content="图标工坊第三章「墨 · 掌上」：移动端固定底部导航，Font Awesome 字体图标方式，含数字徽章与红点">
+    <title>图标工坊 · 第三章 墨·掌上 — 字体图标底部导航</title>
+    <!-- 本地图标字体库：cdn/fontawesome（字体图标方式） -->
+    <link rel="stylesheet" href="cdn/fontawesome/css/all.min.css">
+    <style>
+        :root {
+            --zxr_ink: #10171d;
+            --zxr_ink2: #16212a;
+            --zxr_paper: #f5f1e9;
+            --zxr_coral: #d65c42;
+            --zxr_gold: #d9a441;
+            --zxr_muted: #8fa0a8;
+            --zxr_line: rgba(245, 241, 233, .14);
+            --zxr_tab_h: 64px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            color: var(--zxr_paper);
+            background:
+                radial-gradient(circle at 50% -10%, rgba(214, 92, 66, .16), transparent 24rem),
+                var(--zxr_ink);
+            font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+            line-height: 1.7;
+        }
+
+        a { color: inherit; }
+
+        /* ===== 掌上画布：自适应宽度，最大 520px 居中 ===== */
+        .zxr_app {
+            position: relative;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding: 0 20px calc(var(--zxr_tab_h) + 56px);
+        }
+
+        /* ===== 顶栏 ===== */
+        .zxr_topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 18px 0 6px;
+        }
+
+        .zxr_brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font: 700 14px "Microsoft YaHei", sans-serif;
+            letter-spacing: .08em;
+        }
+
+        .zxr_mark {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            color: var(--zxr_ink);
+            background: var(--zxr_paper);
+            border-radius: 50% 50% 50% 8px;
+            transform: rotate(-12deg);
+        }
+
+        .zxr_home_link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border: 1px solid var(--zxr_line);
+            border-radius: 999px;
+            text-decoration: none;
+            color: var(--zxr_muted);
+            font: 600 12px "Microsoft YaHei", sans-serif;
+            letter-spacing: .06em;
+            transition: border-color .2s, color .2s;
+        }
+
+        .zxr_home_link:hover { border-color: var(--zxr_coral); color: var(--zxr_paper); }
+
+        .zxr_home_link i { font-size: 12px; }
+
+        /* ===== 英雄区 ===== */
+        .zxr_hero { padding: 34px 0 8px; }
+
+        .zxr_kicker {
+            margin: 0 0 12px;
+            color: var(--zxr_gold);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .zxr_title_row { display: flex; align-items: flex-end; gap: 14px; }
+
+        .zxr_hanzi {
+            margin: 0;
+            font-family: "SimSun", "Songti SC", "STSong", serif;
+            font-size: 84px;
+            line-height: .95;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--zxr_paper);
+        }
+
+        .zxr_hanzi_sub { margin: 0 0 12px; font-size: clamp(1.5rem, 6vw, 2rem); line-height: 1.2; letter-spacing: -.02em; }
+
+        .zxr_lede { margin: 18px 0 0; color: var(--zxr_muted); font-size: 14.5px; max-width: 420px; }
+
+        /* ===== 卡片分区 ===== */
+        .zxr_section { margin-top: 30px; }
+
+        .zxr_card {
+            padding: 22px 20px;
+            background: var(--zxr_ink2);
+            border: 1px solid var(--zxr_line);
+            border-radius: 14px;
+        }
+
+        .zxr_card_head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+
+        .zxr_card_head h2 { margin: 0; font-size: 17px; letter-spacing: .02em; }
+
+        .zxr_card_no { color: var(--zxr_gold); font: 400 11px Georgia, serif; letter-spacing: .12em; }
+
+        /* 徽章标本 */
+        .zxr_badge_row { display: flex; justify-content: space-around; gap: 16px; flex-wrap: wrap; }
+
+        .zxr_specimen { display: grid; justify-items: center; gap: 10px; }
+
+        .zxr_specimen_icon {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            display: grid;
+            place-items: center;
+            border: 1px dashed var(--zxr_line);
+            border-radius: 12px;
+        }
+
+        .zxr_specimen_icon > i { font-size: 22px; color: var(--zxr_paper); }
+
+        /* 数字徽章：定位在图标右上角 */
+        .zxr_badge_num {
+            position: absolute;
+            top: -7px;
+            right: -9px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            display: grid;
+            place-items: center;
+            background: var(--zxr_coral);
+            color: #fff;
+            border-radius: 999px;
+            font: 700 10px/1 "Microsoft YaHei", sans-serif;
+            border: 2px solid var(--zxr_ink2);
+            box-shadow: 0 4px 10px rgba(214, 92, 66, .4);
+        }
+
+        /* 红点徽章：定位在图标右上角 */
+        .zxr_badge_dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 9px;
+            height: 9px;
+            background: var(--zxr_coral);
+            border-radius: 50%;
+            border: 2px solid var(--zxr_ink2);
+            box-shadow: 0 3px 8px rgba(214, 92, 66, .45);
+        }
+
+        .zxr_specimen b { color: var(--zxr_muted); font: 600 11px "Microsoft YaHei", sans-serif; letter-spacing: .08em; }
+
+        .zxr_reset_btn {
+            margin-top: 18px;
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid var(--zxr_coral);
+            border-radius: 999px;
+            color: var(--zxr_coral);
+            font: 700 13px "Microsoft YaHei", sans-serif;
+            letter-spacing: .08em;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+
+        .zxr_reset_btn:hover { background: var(--zxr_coral); color: #fff; }
+
+        /* 代码卡 */
+        .zxr_code {
+            margin: 0;
+            padding: 16px 18px;
+            background: #0b1015;
+            border: 1px solid var(--zxr_line);
+            border-radius: 10px;
+            color: #cfe0d8;
+            font: 12.5px/1.8 Consolas, "Courier New", monospace;
+            overflow-x: auto;
+        }
+
+        .zxr_code .zxr_tag { color: #e08a76; }
+
+        .zxr_code .zxr_cls { color: var(--zxr_gold); }
+
+        /* 页脚 */
+        .zxr_foot {
+            margin-top: 34px;
+            padding-top: 18px;
+            border-top: 1px solid var(--zxr_line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--zxr_muted);
+            font: 11.5px "Microsoft YaHei", sans-serif;
+            letter-spacing: .05em;
+        }
+
+        .zxr_foot a { color: var(--zxr_paper); text-decoration: none; border-bottom: 1px solid var(--zxr_coral); padding-bottom: 1px; }
+
+        /* ===== 固定底部导航：宽度自适应（100%，最大 520px 居中） ===== */
+        .zxr_tabbar {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 520px;
+            height: calc(var(--zxr_tab_h) + env(safe-area-inset-bottom));
+            padding: 0 6px env(safe-area-inset-bottom);
+            display: flex;
+            align-items: stretch;
+            background: rgba(22, 33, 42, .92);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--zxr_line);
+            z-index: 50;
+        }
+
+        /* 四个导航项均分宽度 */
+        .zxr_tab {
+            position: relative;
+            flex: 1;
+            display: grid;
+            justify-items: center;
+            align-content: center;
+            gap: 4px;
+            padding: 6px 0 4px;
+            background: none;
+            border: none;
+            color: var(--zxr_muted);
+            cursor: pointer;
+            transition: color .2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .zxr_tab i { font-size: 20px; transition: transform .2s, color .2s; }
+
+        .zxr_tab span { font: 600 11px "Microsoft YaHei", sans-serif; letter-spacing: .08em; }
+
+        /* 导航项内的徽章：数字与红点，位于图标右上角 */
+        .zxr_tab .zxr_badge_num { top: 2px; right: calc(50% - 22px); }
+
+        .zxr_tab .zxr_badge_dot { top: 10px; right: calc(50% - 18px); }
+
+        .zxr_tab.zxr_active { color: var(--zxr_paper); }
+
+        .zxr_tab.zxr_active i { color: var(--zxr_coral); transform: translateY(-2px) scale(1.08); }
+
+        .zxr_tab.zxr_active span { color: var(--zxr_paper); }
+
+        .zxr_tab.zxr_active::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 26px;
+            height: 3px;
+            background: var(--zxr_coral);
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* 提示气泡 */
+        .zxr_toast {
+            position: fixed;
+            left: 50%;
+            bottom: calc(var(--zxr_tab_h) + 18px);
+            transform: translate(-50%, 14px);
+            padding: 9px 20px;
+            background: var(--zxr_coral);
+            color: #fff;
+            font: 700 12.5px "Microsoft YaHei", sans-serif;
+            border-radius: 999px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s, transform .25s;
+            z-index: 60;
+        }
+
+        .zxr_toast.zxr_show { opacity: 1; transform: translate(-50%, 0); }
+
+        @media (min-width: 560px) {
+            .zxr_app { border-left: 1px solid var(--zxr_line); border-right: 1px solid var(--zxr_line); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .zxr_tab, .zxr_tab i, .zxr_toast { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="zxr_app">
+        <!-- 顶栏 -->
+        <nav class="zxr_topbar">
+            <a class="zxr_brand" href="index.html" aria-label="返回课堂实践首页"><span class="zxr_mark">Z</span><span>图标工坊 · 掌上</span></a>
+            <a class="zxr_home_link" href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>返回首页</a>
+        </nav>
+
+        <!-- 英雄区 -->
+        <header class="zxr_hero">
+            <p class="zxr_kicker">Chapter III / MOBILE · TABBAR</p>
+            <div class="zxr_title_row">
+                <h1 class="zxr_hanzi">墨</h1>
+                <p class="zxr_hanzi_sub">掌上底部导航<br>字体图标版</p>
+            </div>
+            <p class="zxr_lede">固定于底部的四项导航，宽度随屏幕自适应；右上角以数字徽章与红点点睛，是字体图标最日常的舞台。</p>
+        </header>
+
+        <!-- 卡片一：徽章标本 -->
+        <section class="zxr_section">
+            <div class="zxr_card">
+                <div class="zxr_card_head">
+                    <h2>徽章标本</h2>
+                    <span class="zxr_card_no">壹 / BADGE</span>
+                </div>
+                <div class="zxr_badge_row">
+                    <span class="zxr_specimen">
+                        <span class="zxr_specimen_icon">
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                            <span class="zxr_badge_num" id="zxr_spec_num">5</span>
+                        </span>
+                        <b>数字徽章 5</b>
+                    </span>
+                    <span class="zxr_specimen">
+                        <span class="zxr_specimen_icon">
+                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                            <span class="zxr_badge_dot" id="zxr_spec_dot"></span>
+                        </span>
+                        <b>红点徽章</b>
+                    </span>
+                    <span class="zxr_specimen">
+                        <span class="zxr_specimen_icon">
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span class="zxr_badge_num">99+</span>
+                        </span>
+                        <b>数字徽章 99+</b>
+                    </span>
+                </div>
+                <button class="zxr_reset_btn" type="button" id="zxr_reset">恢复全部徽章</button>
+            </div>
+        </section>
+
+        <!-- 卡片二：写法笔记 -->
+        <section class="zxr_section">
+            <div class="zxr_card">
+                <div class="zxr_card_head">
+                    <h2>写法笔记</h2>
+                    <span class="zxr_card_no">贰 / MARKUP</span>
+                </div>
+                <pre class="zxr_code"><code>&lt;<span class="zxr_tag">i</span> <span class="zxr_cls">class="fa-solid fa-house"</span>&gt;&lt;/<span class="zxr_tag">i</span>&gt;
+&lt;<span class="zxr_tag">span</span> <span class="zxr_cls">class="zxr_badge_num"</span>&gt;5&lt;/<span class="zxr_tag">span</span>&gt;
+&lt;<span class="zxr_tag">span</span> <span class="zxr_cls">class="zxr_badge_dot"</span>&gt;&lt;/<span class="zxr_tag">span</span>&gt;
+
+<span style="color:#5c6f66">/* 固定 + 自适应宽度 */</span>
+.zxr_tabbar { <span class="zxr_cls">position</span>: fixed; <span class="zxr_cls">max-width</span>: 520px; }
+.zxr_tab    { <span class="zxr_cls">flex</span>: 1; }</code></pre>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="zxr_foot">
+            <span>邹欣茹 · 《高级网页设计》</span>
+            <span><a href="iconfont-4.html">SVG 版 →</a></span>
+        </footer>
+    </div>
+
+    <!-- 固定底部导航：4 项 -->
+    <nav class="zxr_tabbar" aria-label="底部导航">
+        <button class="zxr_tab zxr_active" type="button" aria-label="首页">
+            <i class="fa-solid fa-house" aria-hidden="true"></i>
+            <span>首页</span>
+        </button>
+        <button class="zxr_tab" type="button" aria-label="发现">
+            <i class="fa-solid fa-compass" aria-hidden="true"></i>
+            <span>发现</span>
+        </button>
+        <button class="zxr_tab" type="button" id="zxr_tab_msg" aria-label="消息，5 条未读">
+            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+            <span class="zxr_badge_num" id="zxr_tab_num">5</span>
+            <span>消息</span>
+        </button>
+        <button class="zxr_tab" type="button" id="zxr_tab_me" aria-label="我的，有新动态">
+            <i class="fa-solid fa-user" aria-hidden="true"></i>
+            <span class="zxr_badge_dot" id="zxr_tab_dot"></span>
+            <span>我的</span>
+        </button>
+    </nav>
+
+    <div class="zxr_toast" id="zxr_toast" role="status">已读</div>
+
+    <script>
+        // 底部导航：点击切换激活项
+        var zxrTabs = document.querySelectorAll('.zxr_tab');
+
+        zxrTabs.forEach(function (zxrTab) {
+            zxrTab.addEventListener('click', function () {
+                zxrTabs.forEach(function (zxrT) { zxrT.classList.remove('zxr_active'); });
+                zxrTab.classList.add('zxr_active');
+
+                // 点「消息」即视为已读：数字徽章消失
+                if (zxrTab.id === 'zxr_tab_msg') {
+                    var zxrNum = document.getElementById('zxr_tab_num');
+                    var zxrSpecNum = document.getElementById('zxr_spec_num');
+                    if (zxrNum) { zxrNum.style.display = 'none'; zxrSpecNum.style.display = 'none'; }
+                    zxrTab.setAttribute('aria-label', '消息，无未读');
+                    zxrShowToast('消息已全部已读');
+                }
+
+                // 点「我的」即清除红点
+                if (zxrTab.id === 'zxr_tab_me') {
+                    var zxrDot = document.getElementById('zxr_tab_dot');
+                    var zxrSpecDot = document.getElementById('zxr_spec_dot');
+                    if (zxrDot) { zxrDot.style.display = 'none'; zxrSpecDot.style.display = 'none'; }
+                    zxrTab.setAttribute('aria-label', '我的，无新动态');
+                    zxrShowToast('红点已清除');
+                }
+            });
+        });
+
+        // 恢复全部徽章（便于课堂演示）
+        document.getElementById('zxr_reset').addEventListener('click', function () {
+            document.getElementById('zxr_tab_num').style.display = 'grid';
+            document.getElementById('zxr_spec_num').style.display = 'grid';
+            document.getElementById('zxr_tab_dot').style.display = 'block';
+            document.getElementById('zxr_spec_dot').style.display = 'block';
+            zxrShowToast('徽章已恢复');
+        });
+
+        // 提示气泡
+        var zxrToast = document.getElementById('zxr_toast');
+        var zxrToastTimer = null;
+
+        function zxrShowToast(zxrMsg) {
+            zxrToast.textContent = zxrMsg;
+            zxrToast.classList.add('zxr_show');
+            clearTimeout(zxrToastTimer);
+            zxrToastTimer = setTimeout(function () {
+                zxrToast.classList.remove('zxr_show');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
