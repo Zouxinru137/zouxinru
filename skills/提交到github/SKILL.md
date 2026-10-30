@@ -4,7 +4,9 @@
 
 ## 仓库信息
 
-- 远程地址：`git@github.com:Zouxinru137/zouxinru.git`（远程名 `github`，分支 `master`）
+- 远程地址：`ssh://git@ssh.github.com:443/Zouxinru137/zouxinru.git`（远程名 `github`，分支 `master`）
+  - **不要用** `git@github.com:...` 形式：本机网络封锁 22 端口（Connection refused），必须走 `ssh.github.com:443`。
+  - 该地址已直接写入远程 `github`，无需 ~/.ssh/config。
 - 认证方式：**SSH 公钥**。本地密钥位于 `C:\Users\ag601\.ssh\id_ed25519`（私钥）/ `id_ed25519.pub`（公钥），公钥已添加到 GitHub 账户 Zouxinru137。
 - 与 Gitee 互不干扰：`origin` 指向 Gitee，`github` 指向 GitHub，两个远程各自独立推送。
 
@@ -14,20 +16,28 @@
 2. `git status` 查看变更，确认没有敏感文件混入。
 3. `git add` 逐个添加要提交的文件（删除的文件用 `git add <已删除路径>` 同步删除记录）。
 4. `git commit -m "<简短中文说明>"`，消息风格与历史一致。
-5. `git push github master` 推送到 GitHub。
+5. `git push github master` 推送到 GitHub（SSH 协议需在非沙箱终端执行）。
 6. `git status` / `git log --oneline -3` 确认推送成功。
 
-## SSH 首次连接
+## 首次连接 / 地址修复
 
-首次连接 github.com 前需信任其主机密钥（已执行过则跳过）：
+- 信任 ssh.github.com 主机密钥（首次推送时对主机密钥提示选 yes，或）：
 
-```
-ssh-keyscan -t ed25519 github.com >> $env:USERPROFILE\.ssh\known_hosts
-```
+  ```
+  ssh -oStrictHostKeyChecking=accept-new -T git@ssh.github.com -p 443
+  ```
+
+  成功会显示 `Hi Zouxinru137!`。
+- 若远程地址被改回 22 端口形式，用下面命令修复：
+
+  ```
+  git remote set-url github ssh://git@ssh.github.com:443/Zouxinru137/zouxinru.git
+  ```
 
 ## 常见问题排查
 
-- **Permission denied (publickey)**：公钥未添加到 GitHub，或 ssh-agent 未加载密钥。验证：`ssh -T git@github.com`（成功会显示 Hi Zouxinru137!）。
+- **Connection refused（github.com:22）**：网络封锁 22 端口，确认远程地址为上面的 443 形式。
+- **Permission denied (publickey)**：公钥未添加到 GitHub。用上面的 ssh -T 命令验证。
 - **远程仓库为空**：直接 `git push -u github master` 即可建立跟踪。
 - **远程有新提交**：先 `git fetch github` 查看差异，再决定合并方式（勿直接强推）。
 
