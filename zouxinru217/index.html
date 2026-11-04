@@ -1,0 +1,217 @@
+<!doctype html>
+<!--
+  作者：邹欣茹
+  建立时间：2026-11-04
+  使用大模型：GLM-5.3-Flash
+  功能名称：股票行情榜（新浪财经风格 Tab 选项卡，1:1 还原设计图）
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="股票行情榜：沪深、沪涨、沪跌、深涨、深跌五个选项卡切换涨跌排行数据">
+    <title>股票行情榜 · Tab 选项卡</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 返回课程首页入口 -->
+    <nav style="text-align:center; margin-bottom:16px;">
+        <a href="../../index.html" style="color:#68757d; font-size:12px; text-decoration:none;">← 返回首页</a>
+    </nav>
+
+    <!-- 行情榜组件：设计图 1（沪深选中）、设计图 2（深涨选中）的 1:1 还原 -->
+    <div class="zxr_widget" id="zxr_stock_widget">
+        <!-- 选项卡导航：data-zxr-tab 与面板 id 后缀对应 -->
+        <div class="zxr_tabs" role="tablist" aria-label="股票行情频道">
+            <button class="zxr_tab zxr_active" type="button" role="tab" data-zxr-tab="hushen" aria-selected="true">沪深</button>
+            <button class="zxr_tab" type="button" role="tab" data-zxr-tab="huzhang" aria-selected="false">沪涨</button>
+            <button class="zxr_tab" type="button" role="tab" data-zxr-tab="hudie" aria-selected="false">沪跌</button>
+            <button class="zxr_tab" type="button" role="tab" data-zxr-tab="shenzhang" aria-selected="false">深涨</button>
+            <button class="zxr_tab" type="button" role="tab" data-zxr-tab="shendie" aria-selected="false">深跌</button>
+        </div>
+
+        <!-- 面板：沪深（设计图 1 数据） -->
+        <div class="zxr_panel zxr_active" id="zxr_panel_hushen" role="tabpanel">
+            <ul class="zxr_list">
+                <li class="zxr_row">
+                    <span class="zxr_name">1. 新能</span>
+                    <span class="zxr_price">8.86</span>
+                    <span class="zxr_change zxr_red">+3.35</span>
+                    <span class="zxr_pct zxr_red">60.58%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">2. 天津松江</span>
+                    <span class="zxr_price">8.16</span>
+                    <span class="zxr_change zxr_red">+0.65</span>
+                    <span class="zxr_pct zxr_red">8.68%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">3. 金瑞科技</span>
+                    <span class="zxr_price">8.79</span>
+                    <span class="zxr_change zxr_red">+0.42</span>
+                    <span class="zxr_pct zxr_red">5.02%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">4. 宏发股份</span>
+                    <span class="zxr_price">17.22</span>
+                    <span class="zxr_change zxr_red">+0.82</span>
+                    <span class="zxr_pct zxr_red">5.00%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">5. 杭齿前进</span>
+                    <span class="zxr_price">7.23</span>
+                    <span class="zxr_change zxr_red">+0.34</span>
+                    <span class="zxr_pct zxr_red">4.93%</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 面板：沪涨（补充演示数据） -->
+        <div class="zxr_panel" id="zxr_panel_huzhang" role="tabpanel">
+            <ul class="zxr_list">
+                <li class="zxr_row">
+                    <span class="zxr_name">1. 中国平安</span>
+                    <span class="zxr_price">45.20</span>
+                    <span class="zxr_change zxr_red">+2.10</span>
+                    <span class="zxr_pct zxr_red">4.87%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">2. 招商银行</span>
+                    <span class="zxr_price">32.15</span>
+                    <span class="zxr_change zxr_red">+0.98</span>
+                    <span class="zxr_pct zxr_red">3.14%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">3. 长江电力</span>
+                    <span class="zxr_price">24.66</span>
+                    <span class="zxr_change zxr_red">+0.70</span>
+                    <span class="zxr_pct zxr_red">2.92%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">4. 浦发银行</span>
+                    <span class="zxr_price">10.12</span>
+                    <span class="zxr_change zxr_red">+0.28</span>
+                    <span class="zxr_pct zxr_red">2.85%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">5. 中国石油</span>
+                    <span class="zxr_price">5.58</span>
+                    <span class="zxr_change zxr_red">+0.15</span>
+                    <span class="zxr_pct zxr_red">2.76%</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 面板：沪跌（补充演示数据，绿色） -->
+        <div class="zxr_panel" id="zxr_panel_hudie" role="tabpanel">
+            <ul class="zxr_list">
+                <li class="zxr_row">
+                    <span class="zxr_name">1. 中信证券</span>
+                    <span class="zxr_price">21.35</span>
+                    <span class="zxr_change zxr_green">-0.85</span>
+                    <span class="zxr_pct zxr_green">-3.83%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">2. 海通证券</span>
+                    <span class="zxr_price">12.08</span>
+                    <span class="zxr_change zxr_green">-0.45</span>
+                    <span class="zxr_pct zxr_green">-3.59%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">3. 上汽集团</span>
+                    <span class="zxr_price">15.62</span>
+                    <span class="zxr_change zxr_green">-0.52</span>
+                    <span class="zxr_pct zxr_green">-3.22%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">4. 光大银行</span>
+                    <span class="zxr_price">3.42</span>
+                    <span class="zxr_change zxr_green">-0.11</span>
+                    <span class="zxr_pct zxr_green">-3.12%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">5. 中国石化</span>
+                    <span class="zxr_price">6.05</span>
+                    <span class="zxr_change zxr_green">-0.18</span>
+                    <span class="zxr_pct zxr_green">-2.89%</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 面板：深涨（设计图 2 数据） -->
+        <div class="zxr_panel" id="zxr_panel_shenzhang" role="tabpanel">
+            <ul class="zxr_list">
+                <li class="zxr_row">
+                    <span class="zxr_name">1. 天顺风能</span>
+                    <span class="zxr_price">10.52</span>
+                    <span class="zxr_change zxr_red">+0.96</span>
+                    <span class="zxr_pct zxr_red">10.04%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">2. 兴源过滤</span>
+                    <span class="zxr_price">16.02</span>
+                    <span class="zxr_change zxr_red">+1.46</span>
+                    <span class="zxr_pct zxr_red">10.03%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">3. 北京君正</span>
+                    <span class="zxr_price">36.92</span>
+                    <span class="zxr_change zxr_red">+3.36</span>
+                    <span class="zxr_pct zxr_red">10.01%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">4. 美盛文化</span>
+                    <span class="zxr_price">32.87</span>
+                    <span class="zxr_change zxr_red">+2.98</span>
+                    <span class="zxr_pct zxr_red">10.01%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">5. 骅威股份</span>
+                    <span class="zxr_price">15.16</span>
+                    <span class="zxr_change zxr_red">+1.38</span>
+                    <span class="zxr_pct zxr_red">10.01%</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 面板：深跌（补充演示数据，绿色） -->
+        <div class="zxr_panel" id="zxr_panel_shendie" role="tabpanel">
+            <ul class="zxr_list">
+                <li class="zxr_row">
+                    <span class="zxr_name">1. 万科A</span>
+                    <span class="zxr_price">28.15</span>
+                    <span class="zxr_change zxr_green">-1.02</span>
+                    <span class="zxr_pct zxr_green">-3.50%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">2. 京东方A</span>
+                    <span class="zxr_price">4.86</span>
+                    <span class="zxr_change zxr_green">-0.16</span>
+                    <span class="zxr_pct zxr_green">-3.19%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">3. 中兴通讯</span>
+                    <span class="zxr_price">31.20</span>
+                    <span class="zxr_change zxr_green">-1.00</span>
+                    <span class="zxr_pct zxr_green">-3.11%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">4. 潍柴动力</span>
+                    <span class="zxr_price">15.42</span>
+                    <span class="zxr_change zxr_green">-0.48</span>
+                    <span class="zxr_pct zxr_green">-3.02%</span>
+                </li>
+                <li class="zxr_row">
+                    <span class="zxr_name">5. 五 粮 液</span>
+                    <span class="zxr_price">132.60</span>
+                    <span class="zxr_change zxr_green">-3.80</span>
+                    <span class="zxr_pct zxr_green">-2.79%</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 外部引用 JS：可复用 Tab 选项卡逻辑 -->
+    <script src="js/tab.js"></script>
+</body>
+</html>

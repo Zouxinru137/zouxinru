@@ -1,0 +1,109 @@
+/*
+  作者：邹欣茹
+  建立时间：2026-11-04
+  使用大模型：GLM-5.3-Flash
+  功能名称：股票行情榜样式（1:1 还原设计图）
+*/
+
+/* ===== 全局 ===== */
+body {
+    margin: 0;
+    padding: 40px 0;
+    background: #f2f2f2; /* 页面浅灰底，突出组件 */
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 12px;
+    color: #333;
+}
+
+/* ===== 行情榜组件 ===== */
+.zxr_widget {
+    width: 250px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+/* 选项卡导航条 */
+.zxr_tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    background: #fbfbfb;
+}
+
+/* 单个选项卡：默认浅色，右侧细分隔线 */
+.zxr_tab {
+    flex: 1;
+    padding: 7px 0;
+    background: none;
+    border: none;
+    border-right: 1px solid #e5e5e5;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.zxr_tab:last-child { border-right: none; }
+
+.zxr_tab:hover { color: #d43c33; }
+
+/* 选中状态：深色底 + 白字（对应设计图中的高亮块） */
+.zxr_tab.zxr_active {
+    background: #3a4a5c;
+    color: #fff;
+}
+
+/* 内容面板：默认隐藏，选中才显示 */
+.zxr_panel { display: none; }
+
+.zxr_panel.zxr_active { display: block; }
+
+/* ===== 行情列表 ===== */
+.zxr_list {
+    margin: 0;
+    padding: 0 8px;
+    list-style: none;
+}
+
+/* 每行：序号名称 | 最新价 | 涨跌额 | 涨幅 */
+.zxr_row {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px dotted #ccc;
+}
+
+.zxr_row:last-child { border-bottom: none; }
+
+/* 名称列：占满剩余宽度 */
+.zxr_name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* 最新价 / 涨跌额 / 涨幅：右对齐的等宽数字列 */
+.zxr_price {
+    width: 52px;
+    text-align: right;
+    font-family: Consolas, Arial, monospace;
+}
+
+.zxr_change {
+    width: 48px;
+    text-align: right;
+    font-family: Consolas, Arial, monospace;
+}
+
+.zxr_pct {
+    width: 58px;
+    text-align: right;
+    font-family: Consolas, Arial, monospace;
+    font-weight: bold;
+}
+
+/* 涨：红；跌：绿（A股习惯） */
+.zxr_red { color: #d43c33; }
+
+.zxr_green { color: #0f9d58; }
