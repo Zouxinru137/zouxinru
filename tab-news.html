@@ -1,0 +1,249 @@
+<!doctype html>
+<!--
+  作者：邹欣茹
+  建立时间：2026-11-04
+  使用大模型：GLM-5.3-Flash
+  功能名称：新闻 Tab 选项卡（国内/省内/国际/最热，外部 JS，可复用）
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="新闻选项卡练习：国内、省内、国际、最热四个新闻频道切换，JS 可复用">
+    <title>新闻选项卡 · Tab 切换</title>
+    <style>
+        :root {
+            --zxr_ink: #1b2832;
+            --zxr_paper: #f5f1e9;
+            --zxr_card: #ffffff;
+            --zxr_coral: #d65c42;
+            --zxr_gold: #c98a2d;
+            --zxr_muted: #68757d;
+            --zxr_line: #d8ded9;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            color: var(--zxr_ink);
+            background:
+                radial-gradient(circle at 50% -10%, rgba(214, 92, 66, .12), transparent 24rem),
+                var(--zxr_paper);
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.7;
+        }
+
+        a { color: inherit; }
+
+        /* ===== 页面容器 ===== */
+        .zxr_page {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 24px 20px 60px;
+        }
+
+        /* ===== 顶栏 ===== */
+        .zxr_topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .zxr_home_link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border: 1px solid #b9c2bb;
+            border-radius: 999px;
+            text-decoration: none;
+            color: var(--zxr_muted);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            transition: border-color .2s, color .2s;
+        }
+
+        .zxr_home_link:hover { border-color: var(--zxr_coral); color: #a74130; }
+
+        /* ===== 页头 ===== */
+        .zxr_head { margin-bottom: 24px; }
+
+        .zxr_head h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: .02em; }
+
+        .zxr_head p { margin: 0; color: var(--zxr_muted); font-size: 14px; }
+
+        /* ===== 选项卡组件 ===== */
+        .zxr_tabs_box {
+            background: var(--zxr_card);
+            border: 1px solid var(--zxr_line);
+            border-radius: 14px;
+            box-shadow: 0 16px 36px rgba(44, 57, 51, .09);
+            overflow: hidden;
+        }
+
+        /* 选项卡导航条 */
+        .zxr_tab_nav {
+            display: flex;
+            border-bottom: 1px solid var(--zxr_line);
+            background: #faf8f3;
+        }
+
+        /* 单个选项卡按钮 */
+        .zxr_tab {
+            position: relative;
+            flex: 1;
+            padding: 14px 10px;
+            background: none;
+            border: none;
+            border-right: 1px solid var(--zxr_line);
+            color: var(--zxr_muted);
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            cursor: pointer;
+            transition: color .2s, background .2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .zxr_tab:last-child { border-right: none; }
+
+        .zxr_tab:hover { color: var(--zxr_ink); background: #f3efe6; }
+
+        /* 选中状态：文字变红 + 底部横条 */
+        .zxr_tab.zxr_active {
+            color: var(--zxr_coral);
+            background: var(--zxr_card);
+        }
+
+        .zxr_tab.zxr_active::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -1px;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 3px;
+            background: var(--zxr_coral);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* 内容面板 */
+        .zxr_panel { display: none; padding: 20px 24px 26px; }
+
+        .zxr_panel.zxr_active { display: block; }
+
+        .zxr_panel h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+            color: var(--zxr_gold);
+            letter-spacing: .06em;
+        }
+
+        .zxr_news_list { margin: 0; padding: 0; list-style: none; }
+
+        .zxr_news_list li {
+            padding: 11px 4px;
+            border-bottom: 1px dashed var(--zxr_line);
+            font-size: 14.5px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .zxr_news_list li:last-child { border-bottom: none; }
+
+        .zxr_news_list time {
+            flex-shrink: 0;
+            color: var(--zxr_muted);
+            font-size: 12px;
+            font-family: Consolas, monospace;
+        }
+
+        .zxr_news_list li:hover { color: var(--zxr_coral); cursor: pointer; }
+
+        /* 页脚 */
+        .zxr_foot {
+            margin-top: 26px;
+            text-align: center;
+            color: var(--zxr_muted);
+            font-size: 12px;
+            letter-spacing: .05em;
+        }
+    </style>
+</head>
+<body>
+    <div class="zxr_page">
+        <!-- 顶栏：返回首页 -->
+        <nav class="zxr_topbar">
+            <a class="zxr_home_link" href="index.html">← 返回首页</a>
+        </nav>
+
+        <!-- 页头 -->
+        <header class="zxr_head">
+            <h1>新闻选项卡</h1>
+            <p>点击选项卡切换频道，JS 外部引用且可复用</p>
+        </header>
+
+        <!-- Tab 选项卡组件：data-zxr-tab 与面板 id 后缀对应 -->
+        <div class="zxr_tabs_box" id="zxr_news_tabs">
+            <div class="zxr_tab_nav" role="tablist" aria-label="新闻频道">
+                <button class="zxr_tab zxr_active" type="button" role="tab" data-zxr-tab="domestic" aria-selected="true">国内新闻</button>
+                <button class="zxr_tab" type="button" role="tab" data-zxr-tab="province" aria-selected="false">省内新闻</button>
+                <button class="zxr_tab" type="button" role="tab" data-zxr-tab="world" aria-selected="false">国际新闻</button>
+                <button class="zxr_tab" type="button" role="tab" data-zxr-tab="hot" aria-selected="false">最热新闻</button>
+            </div>
+
+            <section class="zxr_panel zxr_active" id="zxr_panel_domestic" role="tabpanel">
+                <h2>国内新闻</h2>
+                <ul class="zxr_news_list">
+                    <li><time>11-04</time><span>全国秋粮收获进度超过九成，丰收已成定局</span></li>
+                    <li><time>11-04</time><span>新一轮科技创新规划发布，聚焦人工智能与新能源</span></li>
+                    <li><time>11-03</time><span>多地推出文旅消费季活动，激发冬季旅游市场活力</span></li>
+                    <li><time>11-03</time><span>全国铁路实行新列车运行图，运力进一步优化提升</span></li>
+                </ul>
+            </section>
+
+            <section class="zxr_panel" id="zxr_panel_province" role="tabpanel">
+                <h2>省内新闻</h2>
+                <ul class="zxr_news_list">
+                    <li><time>11-04</time><span>省内高校科技成果转化对接会今日开幕</span></li>
+                    <li><time>11-04</time><span>全省高速公路服务区完成智慧化改造升级</span></li>
+                    <li><time>11-02</time><span>省运会筹备工作进入冲刺阶段，场馆建设基本完工</span></li>
+                    <li><time>11-01</time><span>省内多地开展助农直播活动，拓宽农产品销售渠道</span></li>
+                </ul>
+            </section>
+
+            <section class="zxr_panel" id="zxr_panel_world" role="tabpanel">
+                <h2>国际新闻</h2>
+                <ul class="zxr_news_list">
+                    <li><time>11-04</time><span>多国代表齐聚联合国气候大会，磋商减排新目标</span></li>
+                    <li><time>11-03</time><span>国际航天合作项目取得新进展，深空探测任务启动</span></li>
+                    <li><time>11-02</time><span>全球数字经济峰会闭幕，跨境数据流通成焦点议题</span></li>
+                    <li><time>11-01</time><span>多国央行调整利率政策，全球金融市场波动加剧</span></li>
+                </ul>
+            </section>
+
+            <section class="zxr_panel" id="zxr_panel_hot" role="tabpanel">
+                <h2>最热新闻</h2>
+                <ul class="zxr_news_list">
+                    <li><time>11-04</time><span>热搜第一：国产大飞机新增多条商业航线</span></li>
+                    <li><time>11-04</time><span>热搜第二：全国冬季运动会在即，吉祥物正式亮相</span></li>
+                    <li><time>11-03</time><span>热搜第三：新一代超级计算机算力刷新纪录</span></li>
+                    <li><time>11-03</time><span>热搜第四：城市 15 分钟生活圈建设经验获推广</span></li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="zxr_foot">邹欣茹 · 《高级网页设计》课堂练习</footer>
+    </div>
+
+    <!-- 外部引用 JS：可复用 Tab 选项卡 -->
+    <script src="js/tab-news.js"></script>
+</body>
+</html>
