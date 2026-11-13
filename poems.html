@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<!--
+  作者：邹欣茹
+  建立时间：2026-11-13
+  使用大模型：GLM-5.3-Flash
+  功能名称：诗词展示（Promise.all 并发请求诗词与作者接口，含错误提示、搜索过滤与按标题长度排序）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>诗词展示</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body{
+      padding: 30px;
+      background-color: #f5f7fa;
+    }
+    h1{
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    #zxr_box{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+    }
+    .zxr_item {
+      width: 320px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+    .zxr_text{
+      padding: 16px;
+    }
+    h3{
+      margin-bottom:10px;
+      color:#222;
+    }
+    p{
+      color:#555;
+      line-height:1.6;
+    }
+    .zxr_back{
+      position: fixed;
+      left: 16px;
+      top: 16px;
+      color: #333;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    /* 任务二：作者列表条 */
+    #zxr_authors{
+      text-align: center;
+      margin-bottom: 22px;
+      color: #666;
+      font-size: 14px;
+    }
+    #zxr_authors span{
+      display: inline-block;
+      margin: 0 6px 6px;
+      padding: 3px 12px;
+      background: #fff;
+      border: 1px solid #dfe5ea;
+      border-radius: 999px;
+    }
+    /* 任务三：搜索框 + 排序按钮工具条 */
+    #zxr_toolbar{
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+    #zxr_searchBox{
+      width: 260px;
+      padding: 8px 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+    #zxr_searchBox:focus{
+      border-color: #4a90d9;
+    }
+    #zxr_sortBtn{
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #4a90d9;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #zxr_sortBtn:hover{
+      background: #3a7ec2;
+    }
+    /* 任务一：请求失败时的错误提示框 */
+    #zxr_error{
+      display: none;
+      max-width: 460px;
+      margin: 40px auto;
+      padding: 18px 22px;
+      background: #fdecea;
+      border: 1px solid #f5c6c0;
+      border-radius: 10px;
+      color: #b3261e;
+      font-size: 15px;
+      line-height: 1.7;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <a class="zxr_back" href="./index.html">← 返回首页</a>
+  <h1>诗词列表</h1>
+
+  <!-- 任务二：Promise.all 取回的作者列表 -->
+  <div id="zxr_authors"></div>
+
+  <!-- 任务三：搜索框 + 按标题长度排序按钮 -->
+  <div id="zxr_toolbar">
+    <input id="zxr_searchBox" type="text" placeholder="输入关键词，按标题或内容过滤" oninput="zxr_search()">
+    <button id="zxr_sortBtn" onclick="zxr_sortByTitle()">按标题长度排序 ↑</button>
+  </div>
+
+  <!-- 任务一：服务器没启动时显示错误提示，而不是白屏 -->
+  <div id="zxr_error"></div>
+
+  <div id="zxr_box"></div>
+
+  <script>
+    const zxr_api = 'http://localhost:3004'
+    let zxr_allPoems = []      // 缓存原始数据，搜索和排序都不重新请求
+    let zxr_sorted = false     // 当前是否处于"按标题长度排序"状态
+
+    // 功能：根据搜索关键词和排序状态，把诗词数组渲染成卡片
+    function zxr_render(list) {
+      const zxr_box = document.getElementById('zxr_box')
+      if (list.length === 0) {
+        zxr_box.innerHTML = '<p style="color:#999">没有匹配的诗词</p>'
+        return
+      }
+      zxr_box.innerHTML = list.map(item => `
+        <div class="zxr_item">
+          <img src="${item.pic}">
+          <div class="zxr_text">
+            <h3>${item.title} <small style="color:#888;font-weight:normal">· ${item.author || '佚名'}</small></h3>
+            <p>${item.content}</p>
+          </div>
+        </div>
+      `).join('')
+    }
+
+    // 功能：搜索框输入时按标题或内容过滤（数据来自缓存，不重新请求）
+    function zxr_search() {
+      const zxr_kw = document.getElementById('zxr_searchBox').value.trim()
+      let zxr_list = zxr_allPoems
+      if (zxr_kw) {
+        zxr_list = zxr_allPoems.filter(item =>
+          item.title.includes(zxr_kw) || item.content.includes(zxr_kw)
+        )
+      }
+      if (zxr_sorted) {
+        zxr_list = zxr_list.slice().sort((a, b) => a.title.length - b.title.length)
+      }
+      zxr_render(zxr_list)
+    }
+
+    // 功能：点击按钮按标题长度排序，再点一次恢复原始顺序
+    function zxr_sortByTitle() {
+      zxr_sorted = !zxr_sorted
+      document.getElementById('zxr_sortBtn').textContent =
+        zxr_sorted ? '恢复原始顺序 ↺' : '按标题长度排序 ↑'
+      zxr_search()
+    }
+
+    // 功能：Promise.all 同时请求诗词和作者两个接口，取回后渲染
+    Promise.all([
+      fetch(zxr_api + '/api/poems'),
+      fetch(zxr_api + '/api/authors')
+    ])
+      .then(([zxr_poemsRes, zxr_authorsRes]) =>
+        Promise.all([zxr_poemsRes.json(), zxr_authorsRes.json()])
+      )
+      .then(([zxr_poems, zxr_authors]) => {
+        console.log('诗词：', zxr_poems, '作者：', zxr_authors)
+        // 渲染作者列表条
+        document.getElementById('zxr_authors').innerHTML =
+          '作者：' + zxr_authors.map(a => `<span>${a}</span>`).join('')
+        zxr_allPoems = zxr_poems
+        zxr_render(zxr_allPoems)
+      })
+      .catch(err => {
+        // 任务一：请求失败把错误显示到页面上，而不是白屏或只在控制台报错
+        console.error('请求失败', err)
+        const zxr_error = document.getElementById('zxr_error')
+        zxr_error.style.display = 'block'
+        zxr_error.textContent = '请求失败：数据服务器没有启动，请先在 db 文件夹运行 node server.js，然后刷新本页面。'
+      })
+  </script>
+</body>
+</html>
