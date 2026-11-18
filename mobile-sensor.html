@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--
+  作者：邹欣茹（学号后三位：217）
+  建立时间：2026-11-18
+  使用大模型：GLM-5.3-Flash
+  功能名称：摇一摇彩蛋——devicemotion 监听摇一摇抽今日菜谱，无传感器设备自动降级为按钮
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>摇一摇 · 今日菜谱</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(160deg, #1d2635, #2b3a52);
+      color: #eef1f5;
+      min-height: 100vh;
+      padding: 26px 0 50px;
+    }
+    .zxr_stage { max-width: 460px; margin: 0 auto; padding: 0 18px; text-align: center; }
+    h1 { font-size: 22px; margin-bottom: 10px; }
+    .zxr_back { position: fixed; left: 14px; top: 14px; color: #b8c2cf; text-decoration: none; font-size: 14px; z-index: 9; }
+    .zxr_tip { color: #a9b6c6; font-size: 14px; margin-bottom: 30px; }
+
+    /* 抽中菜谱的展示卡片 + 弹出动画 */
+    .zxr_result {
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 26px;
+    }
+    .zxr_result h2 { font-size: 30px; margin-bottom: 10px; }
+    .zxr_result p { color: #b8c2cf; font-size: 14px; line-height: 1.7; }
+    .zxr_pop { animation: zxr_pop .5s ease; }             /* 简单的弹出动画 */
+    @keyframes zxr_pop {
+      0%   { transform: scale(.3); opacity: 0; }
+      60%  { transform: scale(1.12); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .zxr_btn {
+      display: none;
+      margin: 0 auto 20px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 999px;
+      background: #f2b134;
+      color: #2b2b2b;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .zxr_btn.zxr_show { display: inline-block; }
+    .zxr_unsupport {
+      display: none;
+      color: #f28b82;
+      font-size: 14px;
+      margin-bottom: 18px;
+      line-height: 1.8;
+    }
+    .zxr_unsupport.zxr_show { display: block; }
+    .zxr_note { margin-top: 26px; color: #7f8b99; font-size: 12px; line-height: 1.8; text-align: left; }
+
+    /* ═══ 演示视频插入区 ═══ */
+    .zxr_videoSec { margin-top: 34px; text-align: left; }
+    .zxr_videoSec h2 { font-size: 17px; margin-bottom: 12px; color: #fff; }
+    .zxr_video {
+      display: block;
+      width: min(460px, 100%);
+      min-height: 220px;
+      background: #000;
+      border-radius: 12px;
+    }
+    .zxr_videoTip { margin-top: 10px; color: #6f757c; font-size: 12px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <a class="zxr_back" href="./index.html">← 返回首页</a>
+  <div class="zxr_stage">
+    <h1>摇一摇手机，抽今日菜谱</h1>
+    <p class="zxr_tip" id="zxr_tip">摇一摇手机，看看今天吃什么 👇</p>
+
+    <!-- 降级提示：设备不支持传感器时显示 -->
+    <div class="zxr_unsupport" id="zxr_unsupport">
+      当前设备不支持（检测不到加速度传感器），请用手机打开体验摇一摇。
+    </div>
+    <!-- 降级方案：没有传感器的设备用按钮模拟"摇一次" -->
+    <button class="zxr_btn" id="zxr_btn">点我摇一次</button>
+
+    <div class="zxr_result" id="zxr_result">
+      <h2>？</h2>
+      <p>摇一摇，菜谱马上揭晓</p>
+    </div>
+
+    <!-- 为什么要降级：桌面电脑和模拟器没有加速度传感器，devicemotion 事件
+         不会触发（或没有数据），页面若只依赖摇一摇将永远无响应；
+         所以检测不到传感器时显示提示，并提供"点我摇一次"按钮保证功能可用 -->
+    <p class="zxr_note">为什么必须降级：桌面浏览器 / 模拟器没有加速度传感器，devicemotion 事件不触发，
+      页面会"卡死"在初始状态；因此检测不到传感器时给出提示，并提供按钮兜底，保证任何设备都能看到效果。</p>
+
+    <!-- ══════════ 演示视频插入区（替换方法见下） ══════════
+         把录好的演示视频（mp4）放进本目录，再把下面 <source> 的 src
+         改成你的文件名（例如 src="zxr-shake-demo.mp4"）即可播放 -->
+    <section class="zxr_videoSec">
+      <h2>运行演示视频</h2>
+      <video class="zxr_video" controls preload="metadata">
+        <source src="zxr-shake-demo.mp4" type="video/mp4">
+        浏览器不支持 video 标签，或演示视频 zxr-shake-demo.mp4 尚未放入本目录。
+      </video>
+      <p class="zxr_videoTip">↑ 插入视频的方法：把录好的 mp4 放到本页面同目录，将 source 的 src 改成你的文件名。</p>
+    </section>
+  </div>
+
+  <script>
+    const zxr_threshold = 18      // 合成加速度超过 18 判定为摇动
+    const zxr_coldTime = 1500     // 1.5 秒冷却，防止一次摇动重复触发
+    let zxr_lastShake = 0
+    let zxr_sensorOk = false      // 是否收到过有效的传感器数据
+
+    const zxr_dishes = [
+      { name: '宫保鸡丁', desc: '酸甜微辣，花生酥脆，今天就来点经典川味。' },
+      { name: '麻婆豆腐', desc: '麻辣鲜香烫，配米饭一绝。' },
+      { name: '东坡肉', desc: '肥而不腻入口即化，慢火焖出来的好味道。' },
+      { name: '西红柿炒蛋', desc: '国民家常菜，简单下饭永远不踩雷。' },
+      { name: '鱼香肉丝', desc: '没有鱼的鱼香味，下饭神器。' },
+      { name: '兰州拉面', desc: '一清二白三红四绿五黄，暖胃首选。' }
+    ]
+
+    // 功能：随机抽取一道菜谱渲染到结果卡片，并触发弹出动画
+    function zxr_draw() {
+      const zxr_r = document.getElementById('zxr_result')
+      const zxr_d = zxr_dishes[Math.floor(Math.random() * zxr_dishes.length)]
+      zxr_r.classList.remove('zxr_pop')
+      void zxr_r.offsetWidth          // 强制回流，让动画每次都能重新触发
+      zxr_r.innerHTML = `<h2>${zxr_d.name}</h2><p>${zxr_d.desc}</p>`
+      zxr_r.classList.add('zxr_pop')
+    }
+
+    // 功能：显示"设备不支持"提示和"点我摇一次"降级按钮
+    function zxr_showUnsupported() {
+      document.getElementById('zxr_unsupport').classList.add('zxr_show')
+      document.getElementById('zxr_btn').classList.add('zxr_show')
+      document.getElementById('zxr_tip').textContent = '这台设备摇不了，试试下面的按钮'
+    }
+
+    // 功能：监听 devicotion 事件，取 accelerationIncludingGravity 计算合成加速度，
+    //       超过阈值(18)且过了 1.5s 冷却期才抽一次菜谱；一次摇动只触发一次
+    window.addEventListener('devicemotion', e => {
+      const a = e.accelerationIncludingGravity
+      if (!a || (a.x == null && a.y == null && a.z == null)) {
+        zxr_showUnsupported()
+        return
+      }
+      zxr_sensorOk = true
+      const zxr_mag = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z)   // 合成加速度大小
+      const zxr_now = Date.now()
+      if (zxr_mag > zxr_threshold && zxr_now - zxr_lastShake > zxr_coldTime) {
+        zxr_lastShake = zxr_now
+        zxr_draw()
+      }
+    })
+
+    // 功能：iOS 13+ 需要用户手动授权动作传感器，页面加载后显示授权按钮
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      const zxr_ask = document.createElement('button')
+      zxr_ask.textContent = '开启传感器权限（iPhone 需点击一次）'
+      zxr_ask.style.cssText = 'display:block;margin:0 auto 18px;padding:10px 20px;border:none;border-radius:999px;background:#5c9ded;color:#fff;font-size:14px;cursor:pointer;'
+      zxr_ask.addEventListener('click', () => {
+        DeviceMotionEvent.requestPermission().catch(() => {})
+        zxr_ask.remove()
+      })
+      document.querySelector('.zxr_stage').prepend(zxr_ask)
+    }
+
+    // 功能：3 秒内没收到任何传感器数据就判定设备不支持，显示降级提示和按钮
+    setTimeout(() => { if (!zxr_sensorOk) zxr_showUnsupported() }, 3000)
+
+    // 功能：降级按钮——没有传感器的设备点一下等效于摇一次
+    document.getElementById('zxr_btn').addEventListener('click', zxr_draw)
+  </script>
+</body>
+</html>

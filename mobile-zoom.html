@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--
+  作者：邹欣茹（学号后三位：217）
+  建立时间：2026-11-18
+  使用大模型：GLM-5.3-Flash
+  功能名称：图片查看器——双指缩放(1~4x) + 双击放大(1x/2x) + 单指拖动查看细节
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>图片查看器 · 双指缩放</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #14161a;
+      color: #e8eaed;
+      padding: 20px 0 50px;
+    }
+    .zxr_stage { max-width: 560px; margin: 0 auto; padding: 0 14px; }
+    h1 { font-size: 21px; text-align: center; margin-bottom: 12px; }
+    .zxr_back { position: fixed; left: 14px; top: 14px; color: #9aa0a6; text-decoration: none; font-size: 14px; z-index: 9; }
+
+    /* 查看器容器：overflow hidden 裁掉放大溢出，禁用手势默认行为与选中 */
+    .zxr_viewer {
+      position: relative;
+      height: 62vh;
+      border-radius: 14px;
+      overflow: hidden;
+      touch-action: none;        /* 禁止浏览器默认缩放/滚动，手势全部交给 JS */
+      user-select: none;
+      -webkit-user-select: none;
+      background: #000;
+    }
+    .zxr_img {
+      width: 100%;
+      display: block;
+      transform-origin: 0 0;     /* 缩放基准固定在左上角，平移量全部由 JS 计算，保证缩放不跳 */
+      will-change: transform;
+    }
+    .zxr_anim { transition: transform .25s ease; }  /* 双击切换时加 0.25s 过渡 */
+
+    .zxr_hint {
+      text-align: center;
+      color: #9aa0a6;
+      font-size: 13px;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+    .zxr_scaleTxt {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      padding: 4px 12px;
+      background: rgba(0, 0, 0, .5);
+      border-radius: 999px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    /* ═══ 演示视频插入区 ═══ */
+    .zxr_videoSec { margin-top: 30px; }
+    .zxr_videoSec h2 { font-size: 17px; margin-bottom: 12px; color: #fff; }
+    .zxr_video {
+      display: block;
+      width: min(560px, 100%);
+      min-height: 220px;
+      background: #000;
+      border-radius: 12px;
+    }
+    .zxr_videoTip { margin-top: 10px; color: #6f757c; font-size: 12px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <a class="zxr_back" href="./index.html">← 返回首页</a>
+  <div class="zxr_stage">
+    <h1>图片查看器</h1>
+    <div class="zxr_viewer" id="zxr_viewer">
+      <img class="zxr_img" id="zxr_img" src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站">
+      <span class="zxr_scaleTxt" id="zxr_scaleTxt">1.00x</span>
+    </div>
+    <p class="zxr_hint">双指缩放请用手机打开 · 双击在 1x / 2x 间切换 · 放大后可单指拖动查看细节</p>
+
+    <!-- ══════════ 演示视频插入区（替换方法见下） ══════════
+         把录好的演示视频（mp4）放进本目录，再把下面 <source> 的 src
+         改成你的文件名（例如 src="zxr-zoom-demo.mp4"）即可播放 -->
+    <section class="zxr_videoSec">
+      <h2>运行演示视频</h2>
+      <video class="zxr_video" controls preload="metadata">
+        <source src="zxr-zoom-demo.mp4" type="video/mp4">
+        浏览器不支持 video 标签，或演示视频 zxr-zoom-demo.mp4 尚未放入本目录。
+      </video>
+      <p class="zxr_videoTip">↑ 插入视频的方法：把录好的 mp4 放到本页面同目录，将 source 的 src 改成你的文件名。</p>
+    </section>
+  </div>
+
+  <script>
+    const zxr_viewer = document.getElementById('zxr_viewer')
+    const zxr_img = document.getElementById('zxr_img')
+    const zxr_scaleTxt = document.getElementById('zxr_scaleTxt')
+    const zxr_minScale = 1    // 缩放下限
+    const zxr_maxScale = 4    // 缩放上限
+
+    let zxr_scale = 1, zxr_tx = 0, zxr_ty = 0
+    let zxr_mode = ''                       // 'pinch' 双指 | 'drag' 单指 | '' 空闲
+    let zxr_startDist = 0, zxr_startScale = 1
+    let zxr_anchor = { mx: 0, my: 0, ux: 0, uy: 0 }   // 双指中点及该点对应的图片内容坐标（缩放基准）
+    let zxr_dragStart = { x: 0, y: 0, tx: 0, ty: 0 }
+    let zxr_lastTap = 0, zxr_lastX = 0, zxr_lastY = 0   // 双击检测
+
+    // 功能：把缩放与平移应用到图片上；scale=1 时强制居中（回弹归位），scale>1 时把平移限制在边界内
+    function zxr_apply(zxr_anim) {
+      const zxr_w = zxr_viewer.clientWidth
+      const zxr_h = zxr_viewer.clientHeight
+      if (zxr_scale <= 1) {
+        zxr_tx = 0; zxr_ty = 0
+      } else {
+        // 图片左上角平移范围：[-(s-1)w, 0]，保证图片始终覆盖容器、不拖出边界
+        zxr_tx = Math.min(0, Math.max(zxr_w - zxr_w * zxr_scale, zxr_tx))
+        zxr_ty = Math.min(0, Math.max(zxr_h - zxr_h * zxr_scale, zxr_ty))
+      }
+      zxr_img.classList.toggle('zxr_anim', !!zxr_anim)
+      zxr_img.style.transform = `translate(${zxr_tx}px, ${zxr_ty}px) scale(${zxr_scale})`
+      zxr_scaleTxt.textContent = zxr_scale.toFixed(2) + 'x'
+      if (zxr_anim) setTimeout(() => zxr_img.classList.remove('zxr_anim'), 260)
+    }
+
+    // 功能：计算两指间的直线距离
+    function zxr_dist(zxr_t) {
+      return Math.hypot(zxr_t[0].clientX - zxr_t[1].clientX, zxr_t[0].clientY - zxr_t[1].clientY)
+    }
+
+    // 功能：以容器内某点 (mx,my) 为锚点缩放到目标倍数——先算出锚点处的内容坐标 u=(m-t)/s，
+    //       再按新倍数反推平移 t=m-u*s，锚点下的像素始终钉在原位，这就是"缩放不跳"的保证
+    function zxr_zoomAt(zxr_mx, zxr_my, zxr_target, zxr_anim) {
+      const zxr_ux = (zxr_mx - zxr_tx) / zxr_scale
+      const zxr_uy = (zxr_my - zxr_ty) / zxr_scale
+      zxr_scale = Math.min(zxr_maxScale, Math.max(zxr_minScale, zxr_target))
+      zxr_tx = zxr_mx - zxr_ux * zxr_scale
+      zxr_ty = zxr_my - zxr_uy * zxr_scale
+      zxr_apply(zxr_anim)
+    }
+
+    // 功能：手指按下时记录手势模式：单指→拖动起点；双指→起始指距、起始倍数和缩放锚点
+    zxr_viewer.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) {
+        zxr_mode = 'pinch'
+        zxr_startDist = zxr_dist(e.touches)
+        zxr_startScale = zxr_scale
+        const zxr_r = zxr_viewer.getBoundingClientRect()
+        zxr_anchor.mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - zxr_r.left
+        zxr_anchor.my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - zxr_r.top
+        zxr_anchor.ux = (zxr_anchor.mx - zxr_tx) / zxr_scale
+        zxr_anchor.uy = (zxr_anchor.my - zxr_ty) / zxr_scale
+      } else if (e.touches.length === 1) {
+        zxr_mode = 'drag'
+        zxr_dragStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx: zxr_tx, ty: zxr_ty }
+      }
+    })
+
+    // 功能：手指移动——双指按"起始指距 × 比例"缩放（1~4 倍，以两指中点为基准）；
+    //       单指且已放大时拖动图片查看细节
+    zxr_viewer.addEventListener('touchmove', e => {
+      e.preventDefault()   // 阻止浏览器默认缩放/滚动（监听器必须 passive:false）
+      if (zxr_mode === 'pinch' && e.touches.length === 2) {
+        zxr_scale = Math.min(zxr_maxScale, Math.max(zxr_minScale, zxr_startScale * zxr_dist(e.touches) / zxr_startDist))
+        zxr_tx = zxr_anchor.mx - zxr_anchor.ux * zxr_scale
+        zxr_ty = zxr_anchor.my - zxr_anchor.uy * zxr_scale
+        zxr_apply(false)
+      } else if (zxr_mode === 'drag' && e.touches.length === 1 && zxr_scale > 1) {
+        zxr_tx = zxr_dragStart.tx + (e.touches[0].clientX - zxr_dragStart.x)
+        zxr_ty = zxr_dragStart.ty + (e.touches[0].clientY - zxr_dragStart.y)
+        zxr_apply(false)
+      }
+    }, { passive: false })
+
+    // 功能：手指抬起——全部抬起时做双击检测（300ms 内两次点按距离<30px 即双击，在 1x/2x 间切换）
+    //       并把图片回弹限制在边界内；双指松开一根时无缝转为单指拖动
+    zxr_viewer.addEventListener('touchend', e => {
+      if (e.touches.length === 0) {
+        if (zxr_mode === 'drag') {
+          const zxr_r = zxr_viewer.getBoundingClientRect()
+          const zxr_cx = e.changedTouches[0].clientX - zxr_r.left
+          const zxr_cy = e.changedTouches[0].clientY - zxr_r.top
+          const zxr_now = Date.now()
+          if (zxr_now - zxr_lastTap < 300 && Math.hypot(zxr_cx - zxr_lastX, zxr_cy - zxr_lastY) < 30) {
+            if (zxr_scale > 1.05) { zxr_scale = 1; zxr_tx = 0; zxr_ty = 0; zxr_apply(true) }  // 双击回到 1x 并居中
+            else zxr_zoomAt(zxr_cx, zxr_cy, 2, true)                                          // 双击放大到 2x
+            zxr_lastTap = 0
+          } else {
+            zxr_lastTap = zxr_now; zxr_lastX = zxr_cx; zxr_lastY = zxr_cy
+            if (zxr_scale > 1) zxr_apply(true)   // 松手后限界回弹
+          }
+        }
+        zxr_mode = ''
+      } else if (e.touches.length === 1 && zxr_mode === 'pinch') {
+        zxr_mode = 'drag'
+        zxr_dragStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx: zxr_tx, ty: zxr_ty }
+      }
+    })
+
+    // 功能：旋转屏幕/改变窗口尺寸后重新做边界限制，状态不丢失
+    window.addEventListener('resize', () => zxr_apply(false))
+  </script>
+</body>
+</html>

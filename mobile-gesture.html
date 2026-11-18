@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+  作者：邹欣茹（学号后三位：217）
+  建立时间：2026-11-18
+  使用大模型：GLM-5.3-Flash
+  功能名称：手势卡片——左右滑动切换中华美食卡片（touchstart/touchend + 位移阈值 + 冷却防连滑）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>手势卡片 · 中华美食</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f2f3f5;
+      padding: 20px 0 40px;
+    }
+    h1 { text-align: center; font-size: 22px; color: #333; margin-bottom: 18px; }
+    .zxr_stage { max-width: 420px; margin: 0 auto; padding: 0 16px; }
+    .zxr_back { position: fixed; left: 14px; top: 14px; color: #666; text-decoration: none; font-size: 14px; z-index: 9; }
+
+    /* 卡片容器：touch-action: pan-y 只保留竖向滚动，横向滑动手势交给页面自己处理 */
+    .zxr_wrap {
+      position: relative;
+      height: 420px;
+      border-radius: 18px;
+      overflow: hidden;
+      touch-action: pan-y;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .16);
+    }
+    .zxr_card {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 26px 24px;
+      color: #fff;
+      opacity: 0;
+      transition: transform .3s ease, opacity .3s ease;   /* 切换加 0.3s 过渡动画 */
+    }
+    .zxr_card h2 { font-size: 30px; margin-bottom: 10px; text-shadow: 0 2px 8px rgba(0,0,0,.25); }
+    .zxr_card p { font-size: 15px; line-height: 1.7; text-shadow: 0 1px 6px rgba(0,0,0,.25); }
+    /* 四道菜的渐变背景 */
+    .zxr_c1 { background: linear-gradient(140deg, #ff9a5a, #ff4e50); }
+    .zxr_c2 { background: linear-gradient(140deg, #b465da, #ee609c); }
+    .zxr_c3 { background: linear-gradient(140deg, #56ab2f, #2f8f4e); }
+    .zxr_c4 { background: linear-gradient(140deg, #f7b733, #e46b10); }
+
+    /* 边界提示文字 */
+    .zxr_tip {
+      position: absolute;
+      top: 46%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 22px;
+      background: rgba(0, 0, 0, .55);
+      border-radius: 999px;
+      color: #fff;
+      font-size: 15px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+      white-space: nowrap;
+    }
+    .zxr_tip.zxr_show { opacity: 1; }
+    .zxr_idx { text-align: center; margin-top: 16px; color: #667; font-size: 15px; letter-spacing: .1em; }
+  </style>
+</head>
+<body>
+  <a class="zxr_back" href="./index.html">← 返回首页</a>
+  <div class="zxr_stage">
+    <h1>中华美食卡片 · 左右滑动切换</h1>
+    <div class="zxr_wrap" id="zxr_wrap">
+      <div class="zxr_card zxr_c1"><h2>宫保鸡丁</h2><p>川菜经典，鸡丁滑嫩、花生酥脆，酸甜微辣，糊辣荔枝味一绝。</p></div>
+      <div class="zxr_card zxr_c2"><h2>麻婆豆腐</h2><p>麻、辣、烫、香、酥、嫩、鲜、活八字箴言，豆腐嫩滑不碎，红油发亮。</p></div>
+      <div class="zxr_card zxr_c3"><h2>东坡肉</h2><p>慢火细焖数小时，色泽红亮、肥而不腻，入口即化，是江南名馔。</p></div>
+      <div class="zxr_card zxr_c4"><h2>佛跳墙</h2><p>闽菜之首，鲍参翅肚聚于一坛，慢煨入味，开坛香飘四邻。</p></div>
+      <div class="zxr_tip" id="zxr_tip"></div>
+    </div>
+    <p class="zxr_idx" id="zxr_idx">第 1/4 张</p>
+  </div>
+
+  <script>
+    const zxr_cards = document.querySelectorAll('.zxr_card')
+    const zxr_wrap = document.getElementById('zxr_wrap')
+    const zxr_tipEl = document.getElementById('zxr_tip')
+    const zxr_idxEl = document.getElementById('zxr_idx')
+    const zxr_total = zxr_cards.length
+    const zxr_threshold = 40   // 滑动位移阈值：短距离误触不会切换
+    const zxr_cooldown = 300   // 冷却时间：快速连续滑动不会一次跳两张
+    let zxr_cur = 0
+    let zxr_startX = 0
+    let zxr_startY = 0
+    let zxr_lockUntil = 0
+
+    // 功能：渲染当前卡片状态，active 卡居中显示，其余按前后方向偏移，形成 0.3s 滑动过渡
+    function zxr_show() {
+      zxr_cards.forEach((c, i) => {
+        c.style.opacity = i === zxr_cur ? '1' : '0'
+        c.style.transform = i === zxr_cur
+          ? 'translateX(0)'
+          : (i < zxr_cur ? 'translateX(-60px)' : 'translateX(60px)')
+      })
+      zxr_idxEl.textContent = `第 ${zxr_cur + 1}/${zxr_total} 张`
+    }
+
+    // 功能：显示边界提示文字，0.9 秒后自动淡出
+    function zxr_tip(text) {
+      zxr_tipEl.textContent = text
+      zxr_tipEl.classList.add('zxr_show')
+      setTimeout(() => zxr_tipEl.classList.remove('zxr_show'), 900)
+    }
+
+    // 功能：记录手指按下的起点坐标
+    zxr_wrap.addEventListener('touchstart', e => {
+      zxr_startX = e.changedTouches[0].clientX
+      zxr_startY = e.changedTouches[0].clientY
+    })
+
+    // 功能：手指抬起时计算横向位移，超过阈值才切换卡片（左滑下一张、右滑上一张），带边界提示与 300ms 冷却
+    zxr_wrap.addEventListener('touchend', e => {
+      const zxr_dx = e.changedTouches[0].clientX - zxr_startX
+      const zxr_dy = e.changedTouches[0].clientY - zxr_startY
+      if (Math.abs(zxr_dx) < zxr_threshold || Math.abs(zxr_dy) > Math.abs(zxr_dx)) return  // 短距误触 / 竖向滚动不切换
+      if (Date.now() < zxr_lockUntil) return  // 冷却期内直接忽略
+      zxr_lockUntil = Date.now() + zxr_cooldown
+
+      if (zxr_dx < 0) {          // 向左滑 → 下一张
+        if (zxr_cur === zxr_total - 1) zxr_tip('已经是最后一张')
+        else { zxr_cur++; zxr_show() }
+      } else {                   // 向右滑 → 上一张
+        if (zxr_cur === 0) zxr_tip('已经是第一张')
+        else { zxr_cur--; zxr_show() }
+      }
+    })
+
+    zxr_show()
+  </script>
+</body>
+</html>
