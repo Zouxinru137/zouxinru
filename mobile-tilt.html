@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!--
+  作者：邹欣茹（学号后三位：217）
+  建立时间：2026-11-18
+  使用大模型：GLM-5.3-Flash
+  功能名称：倾斜视差——deviceorientation 监听手机左右倾斜，页面元素按层级产生视差位移，无陀螺仪设备降级为滑块模拟
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>倾斜视差 · 手机左右倾斜</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #101623;
+      color: #eef1f5;
+      padding: 24px 0 50px;
+    }
+    .zxr_stage { max-width: 460px; margin: 0 auto; padding: 0 18px; text-align: center; }
+    h1 { font-size: 21px; margin-bottom: 8px; }
+    .zxr_back { position: fixed; left: 14px; top: 14px; color: #b8c2cf; text-decoration: none; font-size: 14px; z-index: 99; }
+    .zxr_tip { color: #a9b6c6; font-size: 14px; margin-bottom: 20px; }
+
+    /* 视差场景：overflow hidden，内部元素绝对定位、按 data-depth 分层 */
+    .zxr_scene {
+      position: relative;
+      height: 340px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #16233b 0%, #2a3f63 55%, #3c5583 100%);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, .35);
+      margin-bottom: 22px;
+    }
+    .zxr_layer { position: absolute; will-change: transform; }
+    /* 远景：星星（移动最慢） */
+    .zxr_stars { inset: 0; }
+    .zxr_stars i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #cfe0ff; opacity: .8; }
+    /* 中景：云层 */
+    .zxr_cloud { width: 120px; height: 38px; border-radius: 999px; background: rgba(255,255,255,.16); filter: blur(2px); }
+    /* 近景：山 */
+    .zxr_mountain {
+      bottom: 0; left: 0; width: 200%; height: 120px;
+      background: #1b2a45;
+      clip-path: polygon(0 100%, 8% 30%, 16% 65%, 26% 15%, 36% 60%, 46% 25%, 58% 70%, 68% 20%, 78% 60%, 88% 30%, 100% 100%);
+    }
+    /* 最前景：大标题文字（移动最快） */
+    .zxr_title {
+      top: 38%; left: 0; width: 100%; text-align: center;
+      font-size: 34px; font-weight: bold; letter-spacing: .1em;
+      text-shadow: 0 4px 18px rgba(0,0,0,.45);
+    }
+    .zxr_sub {
+      top: 54%; left: 0; width: 100%; text-align: center;
+      font-size: 13px; color: #b8c8e0;
+    }
+    .zxr_angle { position: absolute; left: 12px; top: 12px; padding: 4px 12px; background: rgba(0,0,0,.4); border-radius: 999px; font-size: 12px; }
+
+    /* 降级提示 + 滑块模拟 */
+    .zxr_unsupport { display: none; color: #f28b82; font-size: 14px; margin-bottom: 14px; line-height: 1.8; }
+    .zxr_unsupport.zxr_show { display: block; }
+    .zxr_sim { display: none; margin: 6px auto 22px; width: min(360px, 100%); }
+    .zxr_sim.zxr_show { display: block; }
+    .zxr_note { margin-top: 24px; color: #7f8b99; font-size: 12px; line-height: 1.8; text-align: left; }
+
+    /* ═══ 演示视频插入区 ═══ */
+    .zxr_videoSec { margin-top: 32px; text-align: left; }
+    .zxr_videoSec h2 { font-size: 17px; margin-bottom: 12px; color: #fff; }
+    .zxr_video { display: block; width: min(460px, 100%); min-height: 220px; background: #000; border-radius: 12px; }
+    .zxr_videoTip { margin-top: 10px; color: #6f757c; font-size: 12px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <a class="zxr_back" href="./index.html">← 返回首页</a>
+  <div class="zxr_stage">
+    <h1>倾斜视差</h1>
+    <p class="zxr_tip" id="zxr_tip">左右倾斜手机，画面会跟着"歪头"看 👀</p>
+
+    <!-- 降级提示：设备不支持陀螺仪时显示 -->
+    <div class="zxr_unsupport" id="zxr_unsupport">
+      当前设备不支持（检测不到陀螺仪），请用手机打开体验倾斜视差。
+    </div>
+    <!-- 降级方案：拖动滑块模拟手机倾斜角度 -->
+    <input class="zxr_sim" id="zxr_sim" type="range" min="-30" max="30" value="0" step="1">
+
+    <div class="zxr_scene" id="zxr_scene">
+      <div class="zxr_layer zxr_stars" data-depth="0.4" id="zxr_stars"></div>
+      <div class="zxr_layer zxr_cloud" data-depth="1" style="top:22%; left:12%;"></div>
+      <div class="zxr_layer zxr_cloud" data-depth="1.4" style="top:40%; right:10%;"></div>
+      <div class="zxr_layer zxr_title" data-depth="2.6">倾 斜 视 差</div>
+      <div class="zxr_layer zxr_sub" data-depth="2.2">deviceorientation · 手机左右倾斜产生视差位移</div>
+      <div class="zxr_layer zxr_mountain" data-depth="1.8"></div>
+      <span class="zxr_angle" id="zxr_angle">0°</span>
+    </div>
+
+    <!-- 为什么要降级：桌面电脑/模拟器没有陀螺仪，deviceorientation 不会触发，
+         页面若只依赖倾斜将毫无反应；所以检测不到时给出提示，
+         并提供滑块模拟倾斜角度，保证任何设备都能看到视差效果 -->
+    <p class="zxr_note">为什么必须降级：桌面浏览器 / 模拟器没有陀螺仪传感器，deviceorientation 事件不触发，
+      页面会一动不动；因此检测不到传感器时显示提示，并提供滑块模拟倾斜，保证功能在任何设备上都能演示。</p>
+
+    <!-- ══════════ 演示视频插入区 ══════════
+         把录好的演示视频（mp4）放进本目录，再把下面 <source> 的 src
+         改成你的文件名（例如 src="zxr-tilt-demo.mp4"）即可播放 -->
+    <section class="zxr_videoSec">
+      <h2>运行演示视频</h2>
+      <video class="zxr_video" controls preload="metadata">
+        <source src="zxr-tilt-demo.mp4" type="video/mp4">
+        浏览器不支持 video 标签，或演示视频 zxr-tilt-demo.mp4 尚未放入本目录。
+      </video>
+      <p class="zxr_videoTip">↑ 插入视频的方法：把录好的 mp4 放到本页面同目录，将 source 的 src 改成你的文件名。</p>
+    </section>
+  </div>
+
+  <script>
+    const zxr_maxTilt = 30        // 倾斜角度上限：gamma 超过 ±30° 按 ±30° 处理
+    const zxr_strength = 14       // 每层基础位移强度（像素）
+    let zxr_target = 0            // 目标倾斜值（度）
+    let zxr_cur = 0               // 当前平滑后的倾斜值
+    let zxr_sensorOk = false      // 是否收到过有效的陀螺仪数据
+
+    const zxr_layers = document.querySelectorAll('.zxr_layer')
+    const zxr_angleEl = document.getElementById('zxr_angle')
+
+    // 功能：在星空层里随机撒一批星星
+    ;(function zxr_makeStars() {
+      const zxr_box = document.getElementById('zxr_stars')
+      let zxr_html = ''
+      for (let i = 0; i < 40; i++) {
+        zxr_html += `<i style="left:${Math.random() * 100}%;top:${Math.random() * 55}%;opacity:${0.3 + Math.random() * 0.6}"></i>`
+      }
+      zxr_box.innerHTML = zxr_html
+    })()
+
+    // 功能：用 requestAnimationFrame 平滑逼近目标角度，再按每层 data-depth
+    //       不同系数做位移——近景动得多、远景动得少，形成视差层次感
+    function zxr_loop() {
+      zxr_cur += (zxr_target - zxr_cur) * 0.12        // 缓动插值，画面更柔和
+      const zxr_rad = zxr_cur * zxr_strength
+      zxr_layers.forEach(el => {
+        const zxr_d = parseFloat(el.dataset.depth)
+        el.style.transform = `translate3d(${zxr_rad * zxr_d}px, 0, 0)`
+      })
+      zxr_angleEl.textContent = Math.round(zxr_cur) + '°'
+      requestAnimationFrame(zxr_loop)
+    }
+    zxr_loop()
+
+    // 功能：把倾斜角度换算成目标偏移（gamma 左右倾斜：左负右正，钳制在 ±30°）
+    function zxr_setTilt(zxr_gamma) {
+      zxr_target = Math.max(-zxr_maxTilt, Math.min(zxr_maxTilt, zxr_gamma))
+    }
+
+    // 功能：监听 deviceorientation 事件，取 gamma（左右倾斜角）驱动视差
+    window.addEventListener('deviceorientation', e => {
+      if (e.gamma == null) return
+      zxr_sensorOk = true
+      zxr_setTilt(e.gamma)
+    })
+
+    // 功能：iOS 13+ 需要用户手动授权方向传感器，检测到就显示授权按钮
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const zxr_ask = document.createElement('button')
+      zxr_ask.textContent = '开启传感器权限（iPhone 需点击一次）'
+      zxr_ask.style.cssText = 'display:block;margin:0 auto 18px;padding:10px 20px;border:none;border-radius:999px;background:#5c9ded;color:#fff;font-size:14px;cursor:pointer;'
+      zxr_ask.addEventListener('click', () => {
+        DeviceOrientationEvent.requestPermission().catch(() => {})
+        zxr_ask.remove()
+      })
+      document.querySelector('.zxr_stage').prepend(zxr_ask)
+    }
+
+    // 功能：显示"设备不支持"提示和滑块模拟
+    function zxr_showUnsupported() {
+      document.getElementById('zxr_unsupport').classList.add('zxr_show')
+      document.getElementById('zxr_sim').classList.add('zxr_show')
+      document.getElementById('zxr_tip').textContent = '这台设备倾斜不了，拖滑块试试'
+    }
+
+    // 功能：3 秒内没收到任何陀螺仪数据就判定设备不支持，显示降级提示和滑块
+    setTimeout(() => { if (!zxr_sensorOk) zxr_showUnsupported() }, 3000)
+
+    // 功能：降级滑块——拖动等效于左右倾斜手机
+    document.getElementById('zxr_sim').addEventListener('input', e => zxr_setTilt(parseFloat(e.target.value)))
+  </script>
+</body>
+</html>
