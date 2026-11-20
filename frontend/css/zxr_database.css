@@ -1,0 +1,184 @@
+/*
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-20 | 大模型：GLM-5.3-Flash
+  说明：数据库连接测试页样式
+*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #eaf0ff;
+  background: linear-gradient(135deg, #0f1530 0%, #1a2350 50%, #0f1530 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.zxr_canvas_bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+.zxr_page_wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+.zxr_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.zxr_logo {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #9fc0ff;
+}
+
+.zxr_top_nav a {
+  color: #c8d6ff;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 16px;
+  transition: all 0.3s;
+}
+
+.zxr_top_nav a:hover {
+  color: #ffffff;
+  background: rgba(159, 192, 255, 0.18);
+}
+
+.zxr_nav_active {
+  background: rgba(159, 192, 255, 0.22);
+  color: #ffffff;
+}
+
+/* 数据库卡片 */
+.zxr_db_card {
+  margin-top: 60px;
+  padding: 36px 40px;
+  border-radius: 14px;
+  background: rgba(20, 28, 60, 0.72);
+  border: 1px solid rgba(159, 192, 255, 0.22);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.zxr_db_title {
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: #9fc0ff;
+}
+
+.zxr_db_sub {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #a9b8dd;
+}
+
+.zxr_db_form {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.zxr_form_label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.zxr_label_text {
+  width: 64px;
+  flex-shrink: 0;
+  color: #b9c8ee;
+  font-size: 15px;
+}
+
+.zxr_form_input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(159, 192, 255, 0.35);
+  background: rgba(10, 16, 40, 0.8);
+  color: #eaf0ff;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.zxr_form_input:focus {
+  border-color: #9fc0ff;
+}
+
+.zxr_form_btn {
+  align-self: center;
+  margin-top: 6px;
+  padding: 12px 46px;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #5b8cff, #9fc0ff);
+  color: #0f1530;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.zxr_form_btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(91, 140, 255, 0.4);
+}
+
+.zxr_form_btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 提示区域 */
+.zxr_db_message {
+  display: none;
+  margin-top: 24px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.zxr_db_message.zxr_ok {
+  display: block;
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.45);
+  color: #7fe0a7;
+}
+
+.zxr_db_message.zxr_err {
+  display: block;
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.45);
+  color: #ff9d8f;
+}
+
+.zxr_footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: #8a99c4;
+}

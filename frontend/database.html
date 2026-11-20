@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-20 | 大模型：GLM-5.3-Flash
+  页面说明：数据库连接测试页（输入用户名/密码连接 MySQL）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据库连接测试 | Zouxinru</title>
+  <link rel="stylesheet" href="css/zxr_database.css">
+</head>
+<body>
+  <canvas id="zxr_canvas_bg" aria-hidden="true"></canvas>
+
+  <div class="zxr_page_wrap">
+    <header class="zxr_header">
+      <div class="zxr_logo">拾光集市</div>
+      <nav class="zxr_top_nav">
+        <a href="index.html" class="zxr_nav_link">首页</a>
+        <a href="database.html" class="zxr_nav_link zxr_nav_active">数据库</a>
+      </nav>
+    </header>
+
+    <section class="zxr_db_card">
+      <h1 class="zxr_db_title">数据库连接测试</h1>
+      <p class="zxr_db_sub">输入 MySQL 用户名与密码，测试与数据库的连接</p>
+
+      <form id="zxr_db_form" class="zxr_db_form">
+        <label class="zxr_form_label">
+          <span class="zxr_label_text">用户名</span>
+          <input type="text" id="zxr_db_username" class="zxr_form_input" value="root" autocomplete="username">
+        </label>
+        <label class="zxr_form_label">
+          <span class="zxr_label_text">密码</span>
+          <input type="password" id="zxr_db_password" class="zxr_form_input" value="Zxr66666617" autocomplete="current-password">
+        </label>
+        <button type="submit" id="zxr_db_submit" class="zxr_form_btn">连接数据库</button>
+      </form>
+
+      <div id="zxr_db_message" class="zxr_db_message"></div>
+    </section>
+
+    <footer class="zxr_footer">
+      © 2026 Zouxinru | 学号 24002120217 | 拾光集市
+    </footer>
+  </div>
+
+  <script src="js/zxr_index.js"></script>
+  <script src="js/zxr_database.js"></script>
+</body>
+</html>
