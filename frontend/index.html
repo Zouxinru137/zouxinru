@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-20 | 大模型：GLM-5.3-Flash
+  页面说明：项目首页（canvas 粒子背景动画 + 页面导航）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拾光集市 - 首页 | Zouxinru</title>
+  <link rel="stylesheet" href="css/zxr_index.css">
+</head>
+<body>
+  <!-- canvas 粒子背景动画 -->
+  <canvas id="zxr_canvas_bg" aria-hidden="true"></canvas>
+
+  <div class="zxr_page_wrap">
+    <!-- 顶部导航栏 -->
+    <header class="zxr_header">
+      <div class="zxr_logo">拾光集市</div>
+      <nav class="zxr_top_nav">
+        <a href="index.html" class="zxr_nav_link zxr_nav_active">首页</a>
+      </nav>
+    </header>
+
+    <!-- 个人信息横幅 -->
+    <section class="zxr_hero">
+      <h1 class="zxr_hero_title">拾光集市</h1>
+      <p class="zxr_hero_sub">—— 校园二手交易平台 ——</p>
+      <div class="zxr_hero_info">
+        <span class="zxr_hero_item">姓名：Zouxinru</span>
+        <span class="zxr_hero_item">学号：24002120217</span>
+      </div>
+    </section>
+
+    <!-- 项目信息卡片 -->
+    <section class="zxr_project_card">
+      <h2 class="zxr_section_title">项目信息</h2>
+      <ul class="zxr_project_list">
+        <li><span class="zxr_label">项目名称</span><span>拾光集市 —— 校园二手交易平台</span></li>
+        <li><span class="zxr_label">项目类别</span><span>自选</span></li>
+        <li><span class="zxr_label">技术栈</span><span>原生 HTML / CSS / JavaScript + Node.js Express + MySQL</span></li>
+        <li><span class="zxr_label">服务端口</span><span>8217</span></li>
+      </ul>
+    </section>
+
+    <!-- 页面导航（所有完成的页面链接） -->
+    <section class="zxr_nav_section">
+      <h2 class="zxr_section_title">页面导航</h2>
+      <div class="zxr_link_grid">
+        <a class="zxr_link_card" href="index.html">
+          <span class="zxr_link_icon">⌂</span>
+          <span class="zxr_link_name">首页</span>
+          <span class="zxr_link_desc">项目介绍与页面导航</span>
+        </a>
+        <!-- 以后新建的页面在此追加链接（detail 页面除外） -->
+      </div>
+    </section>
+
+    <footer class="zxr_footer">
+      © 2026 Zouxinru | 学号 24002120217 | 拾光集市
+    </footer>
+  </div>
+
+  <script src="js/zxr_index.js"></script>
+</body>
+</html>

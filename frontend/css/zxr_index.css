@@ -1,0 +1,194 @@
+/*
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-20 | 大模型：GLM-5.3-Flash
+  说明：首页样式
+*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #eaf0ff;
+  background: linear-gradient(135deg, #0f1530 0%, #1a2350 50%, #0f1530 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* canvas 背景铺满全屏 */
+.zxr_canvas_bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+.zxr_page_wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+/* 顶部导航 */
+.zxr_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.zxr_logo {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #9fc0ff;
+}
+
+.zxr_top_nav a {
+  color: #c8d6ff;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 16px;
+  transition: all 0.3s;
+}
+
+.zxr_top_nav a:hover {
+  color: #ffffff;
+  background: rgba(159, 192, 255, 0.18);
+}
+
+.zxr_nav_active {
+  background: rgba(159, 192, 255, 0.22);
+  color: #ffffff;
+}
+
+/* 横幅 */
+.zxr_hero {
+  text-align: center;
+  padding: 64px 0 40px;
+}
+
+.zxr_hero_title {
+  font-size: 52px;
+  letter-spacing: 8px;
+  background: linear-gradient(90deg, #9fc0ff, #ffffff, #9fc0ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zxr_hero_sub {
+  margin-top: 12px;
+  font-size: 18px;
+  color: #b9c8ee;
+  letter-spacing: 4px;
+}
+
+.zxr_hero_info {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.zxr_hero_item {
+  padding: 10px 24px;
+  border: 1px solid rgba(159, 192, 255, 0.4);
+  border-radius: 24px;
+  background: rgba(159, 192, 255, 0.08);
+  font-size: 15px;
+}
+
+/* 通用区块标题 */
+.zxr_section_title {
+  font-size: 20px;
+  margin-bottom: 18px;
+  padding-left: 12px;
+  border-left: 4px solid #9fc0ff;
+}
+
+/* 项目信息卡片 */
+.zxr_project_card {
+  margin: 20px 0 40px;
+  padding: 24px 28px;
+  border-radius: 14px;
+  background: rgba(20, 28, 60, 0.72);
+  border: 1px solid rgba(159, 192, 255, 0.22);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.zxr_project_list {
+  list-style: none;
+}
+
+.zxr_project_list li {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(159, 192, 255, 0.18);
+}
+
+.zxr_project_list li:last-child {
+  border-bottom: none;
+}
+
+.zxr_label {
+  width: 110px;
+  color: #9fc0ff;
+  flex-shrink: 0;
+}
+
+/* 页面导航网格 */
+.zxr_link_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.zxr_link_card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 20px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #eaf0ff;
+  background: rgba(20, 28, 60, 0.72);
+  border: 1px solid rgba(159, 192, 255, 0.22);
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.zxr_link_card:hover {
+  transform: translateY(-6px);
+  border-color: #9fc0ff;
+  box-shadow: 0 12px 28px rgba(80, 120, 255, 0.3);
+}
+
+.zxr_link_icon {
+  font-size: 26px;
+  color: #9fc0ff;
+}
+
+.zxr_link_name {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.zxr_link_desc {
+  font-size: 13px;
+  color: #a9b8dd;
+}
+
+/* 页脚 */
+.zxr_footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: #8a99c4;
+}
