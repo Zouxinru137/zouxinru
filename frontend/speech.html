@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-25 | 大模型：GLM-5.3-Flash
+  说明：语音识别页（麦克风录音 / 上传音频文件 -> ASR 模型转文字）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>语音识别</title>
+  <link rel="stylesheet" href="css/zxr_speech.css">
+</head>
+<body>
+  <canvas id="zxr_canvas_bg" aria-hidden="true"></canvas>
+
+  <div class="zxr_page_wrap">
+    <header class="zxr_header">
+      <div class="zxr_logo">拾光集市</div>
+      <nav class="zxr_top_nav">
+        <a href="index.html" class="zxr_nav_link">首页</a>
+        <a href="database.html" class="zxr_nav_link">数据库</a>
+        <a href="news.html" class="zxr_nav_link">科技新闻</a>
+        <a href="gallery.html" class="zxr_nav_link">图文列表</a>
+        <a href="ai-chat.html" class="zxr_nav_link">在线客服</a>
+        <a href="kb.html" class="zxr_nav_link">知识库</a>
+        <a href="vision.html" class="zxr_nav_link">图像识别</a>
+        <a href="speech.html" class="zxr_nav_link zxr_nav_active">语音识别</a>
+      </nav>
+    </header>
+
+    <section class="zxr_speech_section">
+      <h1 class="zxr_speech_title">语音识别（ASR）</h1>
+      <p class="zxr_speech_subtitle">麦克风录音或上传音频文件（wav / mp3 / webm / m4a，≤15MB），AI 自动转写成文字</p>
+
+      <!-- 录音模块 -->
+      <div class="zxr_record_card">
+        <h2 class="zxr_sub_title">方式一：麦克风录音</h2>
+        <div class="zxr_record_row">
+          <button id="zxr_record_btn" class="zxr_record_btn" type="button">● 开始录音</button>
+          <audio id="zxr_playback" class="zxr_playback" controls hidden></audio>
+        </div>
+        <div id="zxr_record_status" class="zxr_status"></div>
+        <button id="zxr_recognize_rec_btn" class="zxr_action_btn" type="button" hidden>识别录音</button>
+      </div>
+
+      <!-- 文件上传模块 -->
+      <div class="zxr_upload_card">
+        <h2 class="zxr_sub_title">方式二：上传音频文件</h2>
+        <div id="zxr_drop_zone" class="zxr_drop_zone">
+          <p class="zxr_drop_text">点击选择 或 将音频文件拖拽到此处</p>
+          <p class="zxr_drop_hint">wav / mp3 / webm / m4a，≤15MB</p>
+          <input id="zxr_file_input" type="file" accept=".wav,.mp3,.webm,.m4a,audio/*" hidden>
+        </div>
+        <div id="zxr_upload_status" class="zxr_status"></div>
+        <button id="zxr_recognize_file_btn" class="zxr_action_btn" type="button" hidden>识别文件</button>
+      </div>
+
+      <!-- 识别结果 -->
+      <div id="zxr_result_card" class="zxr_result_card" hidden>
+        <h2 class="zxr_sub_title">识别结果</h2>
+        <p id="zxr_result_text" class="zxr_result_text"></p>
+        <p id="zxr_result_meta" class="zxr_result_meta"></p>
+      </div>
+    </section>
+
+    <footer class="zxr_footer">
+      <span>拾光集市 · 语音识别</span>
+      <span>姓名：Zouxinru | 学号：24002120217</span>
+    </footer>
+  </div>
+
+  <script src="js/zxr_index.js"></script>
+  <script src="js/zxr_speech.js"></script>
+</body>
+</html>

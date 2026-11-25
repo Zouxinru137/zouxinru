@@ -55,3 +55,19 @@
 /api/zxr_ai_chat | POST | JSON body：{ "provider": "siliconflow", "message": "你们几点营业？", "history": [{"role":"user","content":"..."},{"role":"assistant","content":"..."}] } | 成功示例：
 { "code": 0, "msg": "ok", "data": { "reply": "我们周一至周日10:00-22:00营业。", "provider": "siliconflow", "model": "Qwen/Qwen2.5-7B-Instruct" } }
 Key 无效时友好报错：{ "code": 1, "msg": "API Key 无效或未授权，请检查后端 .env 中的 Key 配置", "data": null } | 2026-11-25
+
+/api/zxr_kb_upload | POST | multipart/form-data，字段名 zxr_kb_file，支持 .doc/.docx/.ppt/.pptx/.pdf/.txt（≤10MB） | 成功示例：
+{ "code": 0, "msg": "上传解析成功", "data": { "fileId": 3, "name": "zxr_kb1_美食街营业与菜品.txt", "ext": "txt", "chars": 521, "chunks": 4 } } | 2026-11-25
+
+/api/zxr_kb_files | GET | 无参数 | 返回文件列表（含分块数与前 2 块预览）：{ "code": 0, "msg": "ok", "data": [{ "id": 3, "name": "...", "ext": "txt", "size": 521, "chunkCount": 4, "uploadTime": "...", "preview": "..." }] } | 2026-11-25
+
+/api/zxr_kb_files/:id | DELETE | 路径参数 id（级联删除分块） | { "code": 0, "msg": "删除成功", "data": { "id": 1 } } | 2026-11-25
+
+/api/zxr_kb_ask | POST | JSON body：{ "question": "北京烤鸭多少钱一只？" } | RAG 检索 Top4 分块拼入提示词后调用大模型；服务端控制台输出[发送给大模型的数据]与[接收自大模型的数据]。成功示例：
+{ "code": 0, "msg": "ok", "data": { "answer": "北京烤鸭的价格是168元/只。", "sources": ["zxr_kb1_美食街营业与菜品.txt"], "retrieved": 2 } } | 2026-11-25
+
+/api/zxr_vision_describe | POST | multipart/form-data，字段名 zxr_image_file（jpg/png/webp/gif，≤8MB），可选文本字段 zxr_question 自定义提问 | 图片转 base64 后调用视觉模型 Qwen/Qwen3-VL-8B-Instruct；服务端控制台输出[发送给大模型的数据]与[接收自大模型的数据]。成功示例：
+{ "code": 0, "msg": "ok", "data": { "description": "一双洁白的运动鞋并排摆放在户外篮球场上...", "model": "Qwen/Qwen3-VL-8B-Instruct", "imageBytes": 669488 } } | 2026-11-25
+
+/api/zxr_asr_transcribe | POST | multipart/form-data，字段名 zxr_audio_file（wav/mp3/webm/m4a，≤15MB），前端支持麦克风录音（MediaRecorder）或文件上传 | 音频转发至硅基流动 /audio/transcriptions，模型 Qwen/Qwen3-ASR-1.7B（七牛渠道 91 个模型中无语音模型，故采用该等效方案）；服务端控制台输出[发送给大模型的数据]与[接收自大模型的数据]。成功示例：
+{ "code": 0, "msg": "ok", "data": { "text": "欢迎来到中华美食街。我们的招牌北京烤鸭，一百六十八元一只。", "model": "Qwen/Qwen3-ASR-1.7B", "audioBytes": 249774 } } | 2026-11-25

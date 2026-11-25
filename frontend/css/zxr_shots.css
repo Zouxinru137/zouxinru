@@ -1,0 +1,64 @@
+/*
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-25 | 大模型：GLM-5.3-Flash
+  说明：功能截图展示页样式
+*/
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #eaf0ff;
+  background: linear-gradient(135deg, #0f1530 0%, #1a2350 50%, #0f1530 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#zxr_canvas_bg { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; }
+
+.zxr_page_wrap {
+  position: relative; z-index: 1; max-width: 960px;
+  margin: 0 auto; padding: 0 24px 40px;
+}
+
+.zxr_header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+.zxr_logo { font-size: 22px; font-weight: bold; letter-spacing: 2px; color: #9fc0ff; }
+.zxr_top_nav a {
+  color: #c8d6ff; text-decoration: none; padding: 6px 12px;
+  border-radius: 16px; transition: all .3s;
+}
+.zxr_top_nav a:hover { color: #fff; background: rgba(159,192,255,.18); }
+.zxr_nav_active { background: rgba(159,192,255,.22); color: #fff; }
+
+.zxr_shots_title { margin-top: 32px; font-size: 28px; letter-spacing: 3px; color: #9fc0ff; }
+.zxr_shots_subtitle { margin-top: 10px; font-size: 14px; color: #b8c4d8; margin-bottom: 24px; }
+
+.zxr_shot_card {
+  margin-bottom: 32px;
+  background: rgba(20,28,60,.72); border: 1px solid rgba(159,192,255,.25);
+  border-radius: 14px; overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+}
+.zxr_shot_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.35);
+}
+.zxr_shot_img { display: block; width: 100%; height: auto; }
+.zxr_shot_caption { display: flex; gap: 16px; padding: 16px 20px; align-items: flex-start; }
+.zxr_shot_num {
+  flex-shrink: 0; font-size: 22px; font-weight: bold; color: #3a6df0;
+  background: rgba(159,192,255,.15); border-radius: 10px; padding: 8px 12px;
+}
+.zxr_shot_name { font-size: 17px; color: #9fc0ff; margin-bottom: 6px; }
+.zxr_shot_desc { font-size: 13px; color: #b8c4d8; line-height: 1.7; }
+.zxr_shot_link {
+  display: inline-block; margin-top: 8px; font-size: 13px;
+  color: #ffd97a; text-decoration: none;
+}
+.zxr_shot_link:hover { text-decoration: underline; }
+
+.zxr_footer {
+  margin-top: 40px; padding-top: 16px;
+  border-top: 1px solid rgba(159,192,255,.2);
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: #7d8db0;
+}

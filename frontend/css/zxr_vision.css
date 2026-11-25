@@ -1,0 +1,94 @@
+/*
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-25 | 大模型：GLM-5.3-Flash
+  说明：图像识别页样式
+*/
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #eaf0ff;
+  background: linear-gradient(135deg, #0f1530 0%, #1a2350 50%, #0f1530 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#zxr_canvas_bg { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; }
+
+.zxr_page_wrap {
+  position: relative; z-index: 1; max-width: 820px;
+  margin: 0 auto; padding: 0 24px 40px;
+}
+
+.zxr_header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+.zxr_logo { font-size: 22px; font-weight: bold; letter-spacing: 2px; color: #9fc0ff; }
+.zxr_top_nav a {
+  color: #c8d6ff; text-decoration: none; padding: 6px 14px;
+  border-radius: 16px; transition: all .3s;
+}
+.zxr_top_nav a:hover { color: #fff; background: rgba(159,192,255,.18); }
+.zxr_nav_active { background: rgba(159,192,255,.22); color: #fff; }
+
+.zxr_vision_title { margin-top: 32px; font-size: 28px; letter-spacing: 3px; color: #9fc0ff; }
+.zxr_vision_subtitle { margin-top: 10px; font-size: 14px; color: #b8c4d8; }
+
+.zxr_drop_zone {
+  margin-top: 22px; padding: 40px 20px; text-align: center;
+  border: 2px dashed rgba(159,192,255,.45); border-radius: 14px;
+  background: rgba(20,28,60,.6); cursor: pointer; transition: all .3s;
+}
+.zxr_drop_zone.zxr_drag_over, .zxr_drop_zone:hover {
+  border-color: #9fc0ff; background: rgba(58,109,240,.18);
+}
+.zxr_drop_icon { font-size: 36px; color: #9fc0ff; }
+.zxr_drop_text { margin-top: 10px; font-size: 15px; }
+.zxr_drop_hint { margin-top: 6px; font-size: 12px; color: #7d8db0; }
+
+.zxr_preview_wrap {
+  margin-top: 22px; display: flex; gap: 16px;
+  background: rgba(20,28,60,.72); border: 1px solid rgba(159,192,255,.25);
+  border-radius: 14px; padding: 16px;
+}
+.zxr_preview_img {
+  max-width: 46%; max-height: 320px; object-fit: contain;
+  border-radius: 10px; background: rgba(0,0,0,.3);
+}
+.zxr_preview_side { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+
+.zxr_status { font-size: 13px; min-height: 20px; }
+.zxr_status_ok { color: #7fe3a5; }
+.zxr_status_err { color: #ff9c9c; }
+
+.zxr_recognize_btn {
+  padding: 12px 20px; border: none; border-radius: 12px; cursor: pointer;
+  background: linear-gradient(135deg, #3a6df0, #7a4ff0);
+  color: #fff; font-size: 14px; font-weight: bold;
+}
+.zxr_recognize_btn:disabled { opacity: .5; cursor: not-allowed; }
+.zxr_reset_btn {
+  padding: 10px 20px; border-radius: 12px; cursor: pointer;
+  border: 1px solid rgba(159,192,255,.4); background: transparent;
+  color: #c8d6ff; font-size: 13px;
+}
+.zxr_reset_btn:hover { background: rgba(159,192,255,.15); }
+
+.zxr_result_card {
+  margin-top: 20px; padding: 18px 20px;
+  background: rgba(20,28,60,.72); border: 1px solid rgba(159,192,255,.25);
+  border-radius: 14px;
+}
+.zxr_result_title { font-size: 16px; color: #9fc0ff; margin-bottom: 10px; }
+.zxr_result_text { font-size: 14px; line-height: 1.8; white-space: pre-wrap; }
+.zxr_result_meta { margin-top: 10px; font-size: 12px; color: #7d8db0; }
+
+.zxr_footer {
+  margin-top: 40px; padding-top: 16px;
+  border-top: 1px solid rgba(159,192,255,.2);
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: #7d8db0;
+}
+
+@media (max-width: 640px) {
+  .zxr_preview_wrap { flex-direction: column; }
+  .zxr_preview_img { max-width: 100%; }
+}

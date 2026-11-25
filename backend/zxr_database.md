@@ -68,3 +68,26 @@ UPDATE zxr_gallery SET zxr_image_url = '/images/zxr_scooter.jpg'  WHERE zxr_id =
 UPDATE zxr_gallery SET zxr_image_url = '/images/zxr_lamp.jpg'     WHERE zxr_id = 7;
 UPDATE zxr_gallery SET zxr_image_url = '/images/zxr_shoes.jpg'    WHERE zxr_id = 8;
 ```
+
+-- 2026-11-25 RAG 知识库建表（服务启动时自动执行，此处留档以便新机器重建）
+CREATE TABLE IF NOT EXISTS zxr_kb_files (
+  zxr_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '文件ID',
+  zxr_original_name VARCHAR(255) NOT NULL COMMENT '原始文件名',
+  zxr_ext VARCHAR(16) NOT NULL COMMENT '扩展名',
+  zxr_size INT NOT NULL DEFAULT 0 COMMENT '文件字节大小',
+  zxr_chunk_count INT NOT NULL DEFAULT 0 COMMENT '解析出的分块数',
+  zxr_upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上传时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='RAG知识库文件表';
+
+CREATE TABLE IF NOT EXISTS zxr_kb_chunks (
+  zxr_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '分块ID',
+  zxr_file_id INT NOT NULL COMMENT '所属文件ID',
+  zxr_chunk_index INT NOT NULL DEFAULT 0 COMMENT '分块序号',
+  zxr_content TEXT NOT NULL COMMENT '分块文本内容',
+  KEY zxr_idx_file (zxr_file_id),
+  CONSTRAINT zxr_fk_file FOREIGN KEY (zxr_file_id) REFERENCES zxr_kb_files(zxr_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='RAG知识库分块表';
+
+-- 测试数据：通过 /api/zxr_kb_upload 上传以下 2 个文件自动插入（zxr_kb_files 2 行，zxr_kb_chunks 8 行，满足每表至少 8 行要求）
+-- 文件1：backend/zxr_kb_seed/zxr_kb1_美食街营业与菜品.txt（521 字符 -> 4 个分块）
+-- 文件2：backend/zxr_kb_seed/zxr_kb2_拾光集市平台规则.docx（369 字符 -> 4 个分块，由脚本 zxr_gen_docx.js 生成的 docx）

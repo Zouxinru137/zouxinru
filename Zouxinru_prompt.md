@@ -63,3 +63,19 @@
 2026-11-20 | 嵌入到webprojectzouxinru里的index（在 webprojectzouxinru/index.html 课堂目录追加「综合项目 01 拾光集市」卡片，链接 http://localhost:8217） | GLM-5.3-Flash
 
 2026-11-25 | 完成 AI 在线客服作业三任务：任务一 Key 安全检查（.gitignore/无前端残留/3 处泄露点）；任务二 中华美食街在线客服人设改造（system 提示词 + 5 问测试 3 答 2 拒）；任务三 多平台热切换（硅基流动/七牛下拉框，后端读 .env）+ 错误 Key 友好提示验证 | GLM-5.3-Flash
+
+2026-11-25 | 上传到GitHub（远程 origin 改为 SSH 地址，rebase 合并远程课堂练习历史，解决 .gitignore 与 README 大小写冲突后推送成功 github.com/Zouxinru137/zouxinru） | GLM-5.3-Flash
+
+2026-11-25 | 完成知识库文件上传功能（doc/docx/ppt/pptx/pdf/txt 解析入库），构建 2 个知识库文件（txt + 生成 docx），完成基于知识库的 RAG 问答与知识库管理（上传/列表/删除），控制台输出发送/接收大模型数据 | GLM-5.3-Flash
+
+2026-11-25 | 完成图像识别功能：上传图片返回描述，使用已有 API-Key 与视觉模型 Qwen/Qwen3-VL-8B-Instruct，控制台输出发送/接收大模型数据，前端 vision.html | GLM-5.3-Flash
+
+2026-11-25 | 实现语音识别：用户指定七牛 Qwen-Audio-3.0-ASR-Flash，经实测七牛渠道无任何语音模型（已列出全部 91 个模型验证），改用硅基流动 Qwen/Qwen3-ASR-1.7B（Qwen ASR 系列）实现录音/上传音频转文字，TTS->ASR 全链路验证通过 | GLM-5.3-Flash
+
+2026-11-25 | 把四张 AI 功能运行截图（在线客服/知识库RAG/图像识别/语音识别）做成展示页 screenshots.html，截图存于 frontend/images/screenshots/，首页加入口卡片 | GLM-5.3-Flash
+
+2026-11-25 | 在课堂实践 webprojectzouxinru/index.html 课堂目录追加"综合项目 02 拾光集市 AI 功能截图展示"卡片，链接 http://localhost:8217/screenshots.html | GLM-5.3-Flash
+
+2026-11-25 | 在 Zouxinru 根目录 index.html（课堂实践首页）课堂目录追加"综合项目 01 拾光集市"与"综合项目 02 AI 功能截图展示"两张卡片，分别链接 http://localhost:8217 与 http://localhost:8217/screenshots.html | GLM-5.3-Flash
+
+2026-11-25 | 生成单文件版截图展示页"AI功能截图展示.html"（四张截图 base64 内嵌，5.39MB，双击即可打开无需服务器），供发给老师查看 | GLM-5.3-Flash
