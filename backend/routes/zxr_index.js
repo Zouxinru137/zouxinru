@@ -9,6 +9,7 @@ const zxrHealthController = require('../controllers/zxr_healthController');
 const zxrDbController = require('../controllers/zxr_dbController');
 const zxrNewsController = require('../controllers/zxr_newsController');
 const zxrGalleryController = require('../controllers/zxr_galleryController');
+const zxrAiController = require('../controllers/zxr_aiController');
 
 // 健康检查
 zxrRouter.get('/zxr_health', zxrHealthController.zxrHealth);
@@ -21,5 +22,9 @@ zxrRouter.get('/zxr_tech_news', zxrNewsController.zxrListNews);
 
 // 图文列表
 zxrRouter.get('/zxr_gallery', zxrGalleryController.zxrListGallery);
+
+// AI 客服：服务商列表 + 对话
+zxrRouter.get('/zxr_ai_providers', zxrAiController.zxrProviders);
+zxrRouter.post('/zxr_ai_chat', zxrAiController.zxrChat);
 
 module.exports = zxrRouter;

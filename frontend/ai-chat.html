@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+  姓名：Zouxinru | 学号：24002120217
+  时间：2026-11-25 | 大模型：GLM-5.3-Flash
+  说明：中华美食街在线客服（AI 聊天），支持 硅基流动/七牛 双服务商热切换
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中华美食街 · 在线客服</title>
+  <link rel="stylesheet" href="css/zxr_ai_chat.css">
+</head>
+<body>
+  <canvas id="zxr_canvas_bg" aria-hidden="true"></canvas>
+
+  <div class="zxr_page_wrap">
+    <header class="zxr_header">
+      <div class="zxr_logo">拾光集市</div>
+      <nav class="zxr_top_nav">
+        <a href="index.html" class="zxr_nav_link">首页</a>
+        <a href="database.html" class="zxr_nav_link">数据库</a>
+        <a href="news.html" class="zxr_nav_link">科技新闻</a>
+        <a href="gallery.html" class="zxr_nav_link">图文列表</a>
+        <a href="ai-chat.html" class="zxr_nav_link zxr_nav_active">在线客服</a>
+      </nav>
+    </header>
+
+    <section class="zxr_chat_section">
+      <h1 class="zxr_chat_title">中华美食街 · 在线客服</h1>
+      <p class="zxr_chat_subtitle">只解答「营业时间 / 招牌菜 / 配送范围」三类问题，支持多轮对话与双服务商热切换</p>
+
+      <div class="zxr_toolbar">
+        <label for="zxr_provider_select" class="zxr_toolbar_label">AI 服务商（热切换）：</label>
+        <select id="zxr_provider_select" class="zxr_provider_select"></select>
+        <button id="zxr_clear_btn" class="zxr_clear_btn" type="button">清空对话</button>
+      </div>
+
+      <div id="zxr_chat_box" class="zxr_chat_box"></div>
+
+      <div class="zxr_input_row">
+        <input id="zxr_input" class="zxr_chat_input" type="text" maxlength="200" placeholder="例如：你们几点营业？招牌菜是什么？">
+        <button id="zxr_send_btn" class="zxr_send_btn" type="button">发送</button>
+      </div>
+      <div id="zxr_status" class="zxr_chat_status"></div>
+    </section>
+
+    <footer class="zxr_footer">
+      <span>拾光集市 · 中华美食街在线客服</span>
+      <span>姓名：Zouxinru | 学号：24002120217</span>
+    </footer>
+  </div>
+
+  <script src="js/zxr_index.js"></script>
+  <script src="js/zxr_ai_chat.js"></script>
+</body>
+</html>

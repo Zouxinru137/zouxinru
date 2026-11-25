@@ -48,3 +48,10 @@
   ]
 }
 失败示例：{ "code": 1, "msg": "查询失败：……", "data": null } | 2026-11-20
+
+/api/zxr_ai_providers | GET | 无请求参数 | 返回服务商名称与默认项（绝不返回 Key），示例：
+{ "code": 0, "msg": "ok", "data": { "providers": ["siliconflow", "qiniu"], "names": { "siliconflow": "硅基流动", "qiniu": "七牛" }, "default": "siliconflow" } } | 2026-11-25
+
+/api/zxr_ai_chat | POST | JSON body：{ "provider": "siliconflow", "message": "你们几点营业？", "history": [{"role":"user","content":"..."},{"role":"assistant","content":"..."}] } | 成功示例：
+{ "code": 0, "msg": "ok", "data": { "reply": "我们周一至周日10:00-22:00营业。", "provider": "siliconflow", "model": "Qwen/Qwen2.5-7B-Instruct" } }
+Key 无效时友好报错：{ "code": 1, "msg": "API Key 无效或未授权，请检查后端 .env 中的 Key 配置", "data": null } | 2026-11-25
