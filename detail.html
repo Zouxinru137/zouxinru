@@ -1,0 +1,94 @@
+<!--
+  文件名：detail.html（内容/详情页）
+  作者：邹欣茹  学号：24002120217
+  时间：2026-11-27
+  说明：三级项目详情页 —— 通过 URL 传参 id（detail.html?id=x）调用详情接口加载数据；
+        包含 AI 剧情简介（LLM 调用）、AI 智能客服对话框、评论列表与发表评论、相关推荐
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>zou 视频 - 详情</title>
+  <link rel="stylesheet" href="fonts/zou-iconfont.css">
+  <link rel="stylesheet" href="css/zouxinru.css">
+</head>
+<body>
+  <div class="zou-page">
+    <!-- 海报区 + 播放按钮 -->
+    <div class="zou-detail-hero">
+      <img class="zou-detail-hero__poster" id="zouPoster" src="images/banner1.jpg" alt="海报">
+      <button class="zou-detail-hero__play" id="zouPlayBtn"><span class="zou-icon zou-icon-play"></span></button>
+      <a class="zou-detail-hero__back" href="javascript:history.back()"><span class="zou-icon zou-icon-arrow" style="transform:rotate(180deg)"></span></a>
+    </div>
+
+    <!-- 影片信息 -->
+    <div class="zou-detail-info" id="zouDetailInfo">
+      <div class="zou-detail-info__title" id="zouTitle">加载中...</div>
+      <div class="zou-detail-info__meta" id="zouMeta"></div>
+      <div class="zou-detail-info__row"><span class="zou-tag">导演</span> <b id="zouDirector">-</b></div>
+      <div class="zou-detail-info__row"><span class="zou-tag">主演</span> <b id="zouActors">-</b></div>
+      <div class="zou-detail-info__row"><span class="zou-tag">官方简介</span> <b id="zouSummary">-</b></div>
+    </div>
+
+    <div style="display:flex; gap:0.625rem; margin:0 0.875rem">
+      <button class="zou-btn" id="zouFavBtn" style="flex:1"><span class="zou-icon zou-icon-heart"></span> 收藏</button>
+      <button class="zou-btn zou-btn--ghost" id="zouPlayBtn2" style="flex:1"><span class="zou-icon zou-icon-play"></span> 立即播放</button>
+    </div>
+
+    <!-- AI 剧情简介（LLM 调用） -->
+    <div class="zou-panel zou-ai-box">
+      <div class="zou-panel__title">
+        <span><span class="zou-icon zou-icon-chat"></span>AI 精彩看点</span>
+        <span class="zou-ai-badge" id="zouAiSource">AI 生成</span>
+      </div>
+      <div class="zou-ai-box__text zou-ai-box__text--loading" id="zouAiText">AI 正在为你解读本片...</div>
+    </div>
+
+    <!-- 相关推荐 -->
+    <div class="zou-panel">
+      <div class="zou-panel__title"><span><span class="zou-icon zou-icon-film"></span>相关推荐</span></div>
+      <div class="zou-scroll-x" id="zouRelated"></div>
+    </div>
+
+    <!-- 评论 -->
+    <div class="zou-panel">
+      <div class="zou-panel__title"><span><span class="zou-icon zou-icon-edit"></span>网友评论（<span id="zouCmtCount">0</span>）</span></div>
+      <div id="zouCommentList"></div>
+      <div class="zou-chat__foot">
+        <input class="zou-chat__input" id="zouCmtInput" placeholder="说点什么吧（需登录）" maxlength="100">
+        <button class="zou-chat__send" id="zouCmtSend"><span class="zou-icon zou-icon-arrow"></span></button>
+      </div>
+    </div>
+
+    <footer class="zou-footer">
+      zou视频 · 《高级网页设计I》三级项目<br>
+      制作：邹欣茹 24002120217 · 2026年11月
+    </footer>
+  </div>
+
+  <!-- AI 客服悬浮按钮 -->
+  <button class="zou-fab" id="zouAiFab"><span class="zou-icon zou-icon-chat"></span></button>
+
+  <!-- AI 客服对话框 -->
+  <div class="zou-chat-mask" id="zouChatMask">
+    <div class="zou-chat">
+      <div class="zou-chat__head">
+        <span><span class="zou-icon zou-icon-chat" style="color:var(--zou-blue)"></span> AI 观影助手</span>
+        <span id="zouChatClose"><span class="zou-icon zou-icon-close"></span></span>
+      </div>
+      <div class="zou-chat__body" id="zouChatBody">
+        <div class="zou-chat__msg zou-chat__msg--ai">你好，我是 zou 视频的 AI 观影助手，关于影片、选片推荐都可以问我~</div>
+      </div>
+      <div class="zou-chat__foot">
+        <input class="zou-chat__input" id="zouChatInput" placeholder="输入你的问题...">
+        <button class="zou-chat__send" id="zouChatSend"><span class="zou-icon zou-icon-arrow"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/zou-common.js"></script>
+  <script src="js/zou-detail.js"></script>
+</body>
+</html>

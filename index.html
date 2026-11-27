@@ -1,0 +1,66 @@
+<!--
+  文件名：index.html（首页）
+  作者：邹欣茹  学号：24002120217
+  时间：2026-11-27
+  说明：三级项目前台首页 —— canvas 粒子背景、轮播图、频道导航、热门推荐列表
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>zou 视频 - 首页</title>
+  <link rel="stylesheet" href="fonts/zou-iconfont.css">
+  <link rel="stylesheet" href="css/zouxinru.css">
+</head>
+<body>
+  <div class="zou-page">
+    <!-- 顶部 hero 区：canvas 粒子 + 页头 + 轮播 -->
+    <section class="zou-hero">
+      <canvas id="zouParticleCanvas" class="zou-canvas-bg"></canvas>
+      <!-- 页头 -->
+      <header class="zou-header">
+        <a class="zou-header__logo" href="index.html"><span class="zou-icon zou-icon-play"></span>zou视频</a>
+        <a class="zou-header__search" href="search.html">
+          <span class="zou-icon zou-icon-search"></span>搜索影片、演员、片单
+        </a>
+        <a href="profile.html"><img class="zou-header__avatar" src="images/avatar.png" alt="我的"></a>
+      </header>
+      <!-- 轮播图（数据驱动渲染） -->
+      <div class="zou-carousel" id="zouCarousel">
+        <div class="zou-carousel__track" id="zouCarouselTrack"></div>
+        <div class="zou-carousel__dots" id="zouCarouselDots"></div>
+      </div>
+    </section>
+
+    <!-- 频道金刚区 -->
+    <nav class="zou-channel" id="zouChannel"></nav>
+
+    <!-- 热门推荐 -->
+    <section class="zou-section">
+      <div class="zou-section__head">
+        <div class="zou-section__title"><span class="zou-icon zou-icon-fire"></span>热门推荐</div>
+        <a class="zou-section__more" href="rank.html">全部 <span class="zou-icon zou-icon-arrow"></span></a>
+      </div>
+    </section>
+    <div class="zou-grid" id="zouHotGrid"></div>
+    <div class="zou-loading" id="zouHotLoading"><span class="zou-icon zou-icon-play"></span> 加载中...</div>
+
+    <footer class="zou-footer">
+      zou视频 · 《高级网页设计I》三级项目<br>
+      制作：邹欣茹 24002120217 · 2026年11月
+    </footer>
+  </div>
+
+  <!-- 底部导航 -->
+  <nav class="zou-tabbar">
+    <a class="zou-tabbar__item zou-tabbar__item--active" href="index.html"><span class="zou-icon zou-icon-home"></span>首页</a>
+    <a class="zou-tabbar__item" href="list.html"><span class="zou-icon zou-icon-grid"></span>频道</a>
+    <a class="zou-tabbar__item" href="rank.html"><span class="zou-icon zou-icon-fire"></span>排行</a>
+    <a class="zou-tabbar__item" href="profile.html"><span class="zou-icon zou-icon-user"></span>我的</a>
+  </nav>
+
+  <script src="js/zou-common.js"></script>
+  <script src="js/zou-index.js"></script>
+</body>
+</html>
