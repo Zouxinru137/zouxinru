@@ -1,0 +1,89 @@
+<!--
+  文件名：admin.html（后台管理，单页应用）
+  作者：邹欣茹  学号：24002120217
+  时间：2026-11-27
+  说明：三级项目后台管理 —— 页面加载校验管理员登录态（未登录跳转/拦截），
+        仪表盘（ECharts，数据来自统计接口）、视频/分类/用户三实体的
+        增删改查 + 搜索 + 分页
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>zou 视频 - 后台管理</title>
+  <link rel="stylesheet" href="fonts/zou-iconfont.css">
+  <link rel="stylesheet" href="css/zouxinru.css">
+</head>
+<body>
+  <div class="zou-page zou-admin-wrap">
+    <!-- 后台页头 -->
+    <div class="zou-admin-head">
+      <div class="zou-section__title"><span class="zou-icon zou-icon-chart"></span>zou视频后台管理系统</div>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <span class="zou-ai-badge" id="zouAdminUser">-</span>
+        <a href="index.html" class="zou-mini-btn zou-mini-btn--edit">前台</a>
+        <a href="javascript:void(0)" id="zouAdminLogout" class="zou-mini-btn zou-mini-btn--del">退出</a>
+      </div>
+    </div>
+
+    <!-- 仪表盘统计卡片 -->
+    <div class="zou-stat-cards">
+      <div class="zou-stat-card"><div class="zou-stat-card__num" id="zouStatVideo">-</div><div class="zou-stat-card__label"><span class="zou-icon zou-icon-film"></span>影片总数</div></div>
+      <div class="zou-stat-card"><div class="zou-stat-card__num" id="zouStatUser">-</div><div class="zou-stat-card__label"><span class="zou-icon zou-icon-user"></span>用户总数</div></div>
+      <div class="zou-stat-card"><div class="zou-stat-card__num" id="zouStatCmt">-</div><div class="zou-stat-card__label"><span class="zou-icon zou-icon-chat"></span>评论总数</div></div>
+      <div class="zou-stat-card"><div class="zou-stat-card__num" id="zouStatPlays">-</div><div class="zou-stat-card__label"><span class="zou-icon zou-icon-fire"></span>总播放量</div></div>
+    </div>
+
+    <!-- 仪表盘图表（数据来自统计接口，不写死） -->
+    <div class="zou-chart-box">
+      <div class="zou-panel__title"><span><span class="zou-icon zou-icon-chart"></span>各分类影片数量</span></div>
+      <div class="zou-chart" id="zouChartCat"></div>
+    </div>
+    <div class="zou-chart-box">
+      <div class="zou-panel__title"><span><span class="zou-icon zou-icon-history"></span>近 7 天新增影片</span></div>
+      <div class="zou-chart" id="zouChartDaily"></div>
+    </div>
+
+    <!-- 实体管理 tab -->
+    <div class="zou-admin-tabs" id="zouAdminTabs" style="margin-top:0.875rem">
+      <button class="zou-tabs__item zou-tabs__item--active" data-t="video"><span class="zou-icon zou-icon-film"></span> 影片管理</button>
+      <button class="zou-tabs__item" data-t="category"><span class="zou-icon zou-icon-grid"></span> 分类管理</button>
+      <button class="zou-tabs__item" data-t="user"><span class="zou-icon zou-icon-user"></span> 用户管理</button>
+    </div>
+
+    <!-- 搜索与新增 -->
+    <div class="zou-toolbar">
+      <input class="zou-searchbar__input" id="zouAdminKw" placeholder="输入关键词搜索...">
+      <button class="zou-btn" id="zouAdminSearch" style="height:2.125rem;padding:0 0.75rem">搜索</button>
+      <button class="zou-btn zou-btn--ghost" id="zouAdminAdd" style="height:2.125rem;padding:0 0.75rem"><span class="zou-icon zou-icon-plus"></span>新增</button>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="zou-table-wrap" style="overflow-x:auto">
+      <table class="zou-table" id="zouAdminTable"></table>
+    </div>
+    <div class="zou-pagination" id="zouAdminPager"></div>
+
+    <footer class="zou-footer">
+      zou视频后台 · 邹欣茹 24002120217 · 2026年11月
+    </footer>
+  </div>
+
+  <!-- 编辑弹窗 -->
+  <div class="zou-modal-mask" id="zouAdminModal">
+    <div class="zou-modal">
+      <div class="zou-modal__title"><span id="zouModalTitle">编辑</span><span id="zouModalClose"><span class="zou-icon zou-icon-close"></span></span></div>
+      <div id="zouModalBody"></div>
+      <div class="zou-modal__foot">
+        <button class="zou-btn zou-btn--ghost" id="zouModalCancel">取消</button>
+        <button class="zou-btn" id="zouModalSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/echarts.min.js"></script>
+  <script src="js/zou-common.js"></script>
+  <script src="js/zou-admin.js"></script>
+</body>
+</html>
