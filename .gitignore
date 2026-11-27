@@ -33,3 +33,7 @@ Thumbs.db
 
 # IDE 临时分享包
 .trae-html-share-packages/
+
+# Trae 编辑器本地配置
+.trae/
+.vscode/

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>腾讯视频 - 不负好时光</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">腾讯视频</a>
+      <nav class="nav" id="navLinks">
+        <a href="#" class="active">首页</a>
+        <a href="#">电视剧</a>
+        <a href="#">电影</a>
+        <a href="#">综艺</a>
+        <a href="#">动漫</a>
+        <a href="#">纪录片</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索剧集、电影、综艺…" autocomplete="off">
+        <button id="searchBtn" aria-label="搜索">搜索</button>
+      </div>
+      <div class="user-area">
+        <span class="vip-tag">VIP</span>
+        <img class="avatar" src="images/cover-7.jpg" alt="用户头像">
+      </div>
+    </div>
+  </header>
+
+  <!-- 焦点横幅 -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <p class="hero-badge">今日热播</p>
+      <h1 id="heroTitle">加载中…</h1>
+      <p class="hero-desc" id="heroDesc"></p>
+      <div class="hero-meta" id="heroMeta"></div>
+      <button class="hero-play">立即播放</button>
+    </div>
+  </section>
+
+  <!-- 分类标签 -->
+  <section class="toolbar">
+    <div class="toolbar-inner">
+      <div class="category-tabs" id="categoryTabs">
+        <button class="tab active" data-slug="all">全部</button>
+      </div>
+      <div class="sort-box">
+        <label>排序：</label>
+        <select id="sortSelect">
+          <option value="rating.desc">评分最高</option>
+          <option value="view_count.desc">播放最多</option>
+          <option value="release_year.desc">最新上线</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- 视频列表 -->
+  <main class="main">
+    <h2 class="section-title" id="listTitle">精选推荐</h2>
+    <div class="video-grid" id="videoGrid">
+      <div class="loading">数据加载中…</div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <p>腾讯视频 · 模拟数据演示项目（Supabase REST API 驱动）</p>
+    <p>纯原生 HTML / CSS / JavaScript 实现</p>
+  </footer>
+
+  <!-- 视频详情弹窗 -->
+  <div class="modal-mask" id="modalMask">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
