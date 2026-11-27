@@ -1,0 +1,4 @@
+node_modules/
+backend/video.sqlite
+.DS_Store
+Thumbs.db
