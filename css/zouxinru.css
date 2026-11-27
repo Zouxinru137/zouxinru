@@ -122,8 +122,9 @@ button, input, textarea, select { font: inherit; color: inherit; outline: none; 
 .zou-empty { text-align: center; color: var(--zou-sub); padding: 3rem 0; font-size: 0.8125rem; }
 .zou-empty .zou-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.4; }
 
-/* 加载动画（animation 使用处之一） */
+/* 加载动画（本地 GIF 动图 + 备用旋转图标动画） */
 .zou-loading { text-align: center; color: var(--zou-sub); padding: 1.5rem 0; font-size: 0.75rem; }
+.zou-loading__img { width: 1.375rem; height: 1.375rem; vertical-align: -0.375rem; margin-right: 0.25rem; }
 .zou-loading .zou-icon { display: inline-block; animation: zou-spin 1s linear infinite; }
 @keyframes zou-spin { to { transform: rotate(360deg); } }
 
