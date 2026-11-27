@@ -1,0 +1,77 @@
+<!--
+  文件名：profile.html（个人中心）
+  作者：邹欣茹  学号：24002120217
+  时间：2026-11-27
+  说明：三级项目个人中心 —— 登录态鉴权（未登录跳转）、用户信息展示、
+        收藏与观看历史（localStorage）、退出登录
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>zou 视频 - 我的</title>
+  <link rel="stylesheet" href="fonts/zou-iconfont.css">
+  <link rel="stylesheet" href="css/zouxinru.css">
+</head>
+<body>
+  <div class="zou-page">
+    <!-- 用户信息头部 -->
+    <div class="zou-profile-head">
+      <img class="zou-profile-head__avatar" id="zouAvatar" src="images/avatar.png" alt="头像">
+      <div>
+        <div class="zou-profile-head__name" id="zouNickname">未登录</div>
+        <div class="zou-profile-head__uid" id="zouUid">登录后享受完整服务</div>
+      </div>
+    </div>
+
+    <!-- 数据统计 -->
+    <div class="zou-stat-row">
+      <div class="zou-stat-item"><div class="zou-stat-item__num" id="zouFavCount">0</div><div class="zou-stat-item__label">收藏</div></div>
+      <div class="zou-stat-item"><div class="zou-stat-item__num" id="zouHisCount">0</div><div class="zou-stat-item__label">看过</div></div>
+      <div class="zou-stat-item"><div class="zou-stat-item__num" id="zouSearchCount">0</div><div class="zou-stat-item__label">搜索记录</div></div>
+    </div>
+
+    <!-- 我的收藏 -->
+    <section class="zou-section" id="zouFavSec" style="display:none">
+      <div class="zou-section__head"><div class="zou-section__title"><span class="zou-icon zou-icon-heart"></span>我的收藏</div></div>
+    </section>
+    <div class="zou-grid" id="zouFavGrid"></div>
+
+    <!-- 观看历史 -->
+    <section class="zou-section" id="zouHisSec" style="display:none">
+      <div class="zou-section__head"><div class="zou-section__title"><span class="zou-icon zou-icon-history"></span>观看历史</div></div>
+    </section>
+    <div id="zouHisList"></div>
+
+    <!-- 功能入口 -->
+    <div class="zou-cell-group">
+      <a class="zou-cell" id="zouClearHis" href="javascript:void(0)">
+        <span class="zou-icon zou-icon-trash"></span><span class="zou-cell__title">清空观看历史</span><span class="zou-cell__arrow zou-icon zou-icon-arrow"></span>
+      </a>
+      <a class="zou-cell" id="zouAdminEntry" href="admin.html" style="display:none">
+        <span class="zou-icon zou-icon-chart"></span><span class="zou-cell__title">后台管理系统（管理员）</span><span class="zou-cell__arrow zou-icon zou-icon-arrow"></span>
+      </a>
+      <a class="zou-cell" id="zouLogout" href="javascript:void(0)">
+        <span class="zou-icon zou-icon-close"></span><span class="zou-cell__title">退出登录</span><span class="zou-cell__arrow zou-icon zou-icon-arrow"></span>
+      </a>
+    </div>
+
+    <footer class="zou-footer">
+      zou视频 · 《高级网页设计I》三级项目<br>
+      制作：邹欣茹 24002120217 · 2026年11月
+    </footer>
+  </div>
+
+  <!-- 底部导航 -->
+  <nav class="zou-tabbar">
+    <a class="zou-tabbar__item" href="index.html"><span class="zou-icon zou-icon-home"></span>首页</a>
+    <a class="zou-tabbar__item" href="list.html"><span class="zou-icon zou-icon-grid"></span>频道</a>
+    <a class="zou-tabbar__item" href="rank.html"><span class="zou-icon zou-icon-fire"></span>排行</a>
+    <a class="zou-tabbar__item zou-tabbar__item--active" href="profile.html"><span class="zou-icon zou-icon-user"></span>我的</a>
+  </nav>
+
+  <script src="js/zou-common.js"></script>
+  <script src="js/zou-profile.js"></script>
+</body>
+</html>

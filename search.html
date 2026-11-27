@@ -1,0 +1,67 @@
+<!--
+  文件名：search.html（搜索结果页）
+  作者：邹欣茹  学号：24002120217
+  时间：2026-11-27
+  说明：三级项目搜索页 —— 关键词搜索接口、搜索历史（localStorage）、热门推荐词
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>zou 视频 - 搜索</title>
+  <link rel="stylesheet" href="fonts/zou-iconfont.css">
+  <link rel="stylesheet" href="css/zouxinru.css">
+</head>
+<body>
+  <div class="zou-page">
+    <!-- 搜索栏 -->
+    <div class="zou-searchbar">
+      <input class="zou-searchbar__input" id="zouSearchInput" placeholder="搜索影片、演员、类型">
+      <button class="zou-btn" id="zouSearchBtn" style="height:2.375rem">搜索</button>
+    </div>
+
+    <!-- 搜索历史 / 热门词 -->
+    <section class="zou-section" id="zouHistorySec">
+      <div class="zou-chip-head">
+        <span><span class="zou-icon zou-icon-history"></span> 搜索历史</span>
+        <span class="zou-icon zou-icon-trash" id="zouHistoryClear"></span>
+      </div>
+      <div class="zou-chips" id="zouHistoryChips"></div>
+    </section>
+    <section class="zou-section">
+      <div class="zou-chip-head"><span><span class="zou-icon zou-icon-fire"></span> 热门搜索</span></div>
+      <div class="zou-chips" id="zouHotChips"></div>
+    </section>
+
+    <!-- 结果区 -->
+    <section class="zou-section" id="zouResultSec" style="display:none">
+      <div class="zou-section__head">
+        <div class="zou-section__title"><span class="zou-icon zou-icon-search"></span>搜索结果</div>
+        <span class="zou-section__more" id="zouResultCount"></span>
+      </div>
+    </section>
+    <div class="zou-grid" id="zouResultGrid"></div>
+    <div class="zou-empty" id="zouResultEmpty" style="display:none">
+      <span class="zou-icon zou-icon-search"></span>没有找到相关内容，换个关键词试试
+    </div>
+    <div class="zou-pagination" id="zouPager"></div>
+
+    <footer class="zou-footer">
+      zou视频 · 《高级网页设计I》三级项目<br>
+      制作：邹欣茹 24002120217 · 2026年11月
+    </footer>
+  </div>
+
+  <!-- 底部导航 -->
+  <nav class="zou-tabbar">
+    <a class="zou-tabbar__item" href="index.html"><span class="zou-icon zou-icon-home"></span>首页</a>
+    <a class="zou-tabbar__item" href="list.html"><span class="zou-icon zou-icon-grid"></span>频道</a>
+    <a class="zou-tabbar__item zou-tabbar__item--active" href="search.html"><span class="zou-icon zou-icon-search"></span>搜索</a>
+    <a class="zou-tabbar__item" href="profile.html"><span class="zou-icon zou-icon-user"></span>我的</a>
+  </nav>
+
+  <script src="js/zou-common.js"></script>
+  <script src="js/zou-search.js"></script>
+</body>
+</html>

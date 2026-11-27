@@ -1,0 +1,63 @@
+<!--
+  文件名：login.html（登录页）
+  作者：邹欣茹  学号：24002120217
+  时间：2026-11-27
+  说明：三级项目登录页 —— 表单校验、canvas 图形验证码（高阶功能1）、
+        登录接口调用、token 存 localStorage 保持登录态
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>zou 视频 - 登录</title>
+  <link rel="stylesheet" href="fonts/zou-iconfont.css">
+  <link rel="stylesheet" href="css/zouxinru.css">
+</head>
+<body>
+  <div class="zou-auth">
+    <a class="zou-header__logo" href="index.html" style="position:relative;z-index:2"><span class="zou-icon zou-icon-play"></span>zou视频</a>
+    <div class="zou-auth__title">欢迎回来</div>
+    <div class="zou-auth__sub">登录后可收藏影片、发表评论、同步观看历史</div>
+
+    <div class="zou-form-item">
+      <label class="zou-form-item__label">用户名</label>
+      <div class="zou-input-wrap">
+        <span class="zou-icon zou-icon-user"></span>
+        <input class="zou-input" id="zouLoginName" placeholder="4~16 位字母开头的用户名" maxlength="16">
+      </div>
+      <div class="zou-form-err" id="zouLoginNameErr"></div>
+    </div>
+
+    <div class="zou-form-item">
+      <label class="zou-form-item__label">密码</label>
+      <div class="zou-input-wrap">
+        <span class="zou-icon zou-icon-star"></span>
+        <input class="zou-input" id="zouLoginPwd" type="password" placeholder="至少 6 位密码" maxlength="20">
+        <span class="zou-input-eye zou-icon zou-icon-search" id="zouLoginEye"></span>
+      </div>
+      <div class="zou-form-err" id="zouLoginPwdErr"></div>
+    </div>
+
+    <div class="zou-form-item">
+      <label class="zou-form-item__label">图形验证码（点击图片刷新）</label>
+      <div class="zou-input-wrap">
+        <input class="zou-input" id="zouLoginCaptcha" placeholder="请输入右侧验证码" maxlength="4">
+        <canvas id="zouCaptchaCanvas" class="zou-canvas-captcha" width="110" height="40"></canvas>
+      </div>
+      <div class="zou-form-err" id="zouLoginCaptchaErr"></div>
+    </div>
+
+    <div class="zou-form-row">
+      <span>验证码为纯前端生成（canvas）</span>
+      <a href="register.html">忘记密码？</a>
+    </div>
+
+    <button class="zou-btn zou-btn--block" id="zouLoginBtn">登 录</button>
+    <div class="zou-auth__switch">还没有账号？<a href="register.html">立即注册</a></div>
+  </div>
+
+  <script src="js/zou-common.js"></script>
+  <script src="js/zou-login.js"></script>
+</body>
+</html>
