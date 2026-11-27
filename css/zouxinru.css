@@ -1,0 +1,426 @@
+/*
+ * 文件名：zouxinru.css
+ * 作者：邹欣茹  学号：24002120217
+ * 时间：2026-11-27
+ * 说明：《高级网页设计I》三级项目全站唯一外部样式（移动端暗色主题）
+ *       rem 方案：html 字号 = 100vw / 23.4375，即 375px 视口下 1rem = 16px
+ */
+
+/* ========== 1. 变量与重置 ========== */
+:root {
+  --zou-bg: #0b111f;            /* 页面背景 */
+  --zou-card: #141c2e;          /* 卡片背景 */
+  --zou-card2: #1a2438;         /* 次级卡片背景 */
+  --zou-line: #232e45;          /* 分割线 */
+  --zou-text: #e9edf5;          /* 主文字 */
+  --zou-sub: #8b94a8;           /* 次文字 */
+  --zou-accent: #ff7f29;        /* 主题橙 */
+  --zou-accent2: #ff5f1f;       /* 深橙 */
+  --zou-blue: #4f7cf0;          /* 辅助蓝 */
+  --zou-radius: 0.625rem;       /* 圆角 */
+  --zou-header-h: 3rem;         /* 页头高度 */
+  --zou-tabbar-h: 3.25rem;      /* 底部导航高度 */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: calc(100vw / 23.4375); }
+@media (min-width: 480px) { html { font-size: 20.5px; } }  /* 桌面预览时锁定 */
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--zou-bg);
+  color: var(--zou-text);
+  font-size: 0.875rem;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+button, input, textarea, select { font: inherit; color: inherit; outline: none; border: none; background: none; }
+::-webkit-scrollbar { width: 0; height: 0; }
+
+/* 页面骨架：内容区 + 底部导航留白 */
+.zou-page { min-height: 100vh; padding-bottom: calc(var(--zou-tabbar-h) + 0.75rem); }
+
+/* ========== 2. 页头 ========== */
+.zou-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--zou-header-h);
+  display: flex; align-items: center;
+  padding: 0 0.875rem; gap: 0.75rem;
+  background: transparent;
+  transition: background 0.3s ease, box-shadow 0.3s ease;   /* 动画1：header 吸顶变色 transition */
+}
+.zou-header.zou-header--solid {
+  background: rgba(11, 17, 31, 0.92);
+  box-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(0.4rem);
+}
+.zou-header__logo {
+  display: flex; align-items: center; gap: 0.375rem;
+  font-size: 1.125rem; font-weight: 700; color: var(--zou-accent);
+}
+.zou-header__logo .zou-icon { font-size: 1.25rem; }
+.zou-header__search {
+  flex: 1; height: 2rem;
+  display: flex; align-items: center; gap: 0.375rem;
+  padding: 0 0.625rem;
+  background: rgba(255, 255, 255, 0.08); border-radius: 1rem;
+  color: var(--zou-sub); font-size: 0.75rem;
+  transition: background 0.2s ease;
+}
+.zou-header__search:active { background: rgba(255, 255, 255, 0.15); }
+.zou-header__avatar { width: 1.75rem; height: 1.75rem; border-radius: 50%; border: 0.0625rem solid rgba(255,255,255,0.25); }
+
+/* ========== 3. 底部导航 ========== */
+.zou-tabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  height: var(--zou-tabbar-h);
+  display: flex;
+  background: rgba(16, 22, 38, 0.96);
+  border-top: 0.0625rem solid var(--zou-line);
+  backdrop-filter: blur(0.4rem);
+}
+.zou-tabbar__item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.125rem;
+  color: var(--zou-sub); font-size: 0.625rem;
+  transition: color 0.25s ease;
+}
+.zou-tabbar__item .zou-icon { font-size: 1.375rem; }
+.zou-tabbar__item.zou-tabbar__item--active { color: var(--zou-accent); }
+
+/* ========== 4. 通用组件 ========== */
+.zou-section { padding: 0.875rem; }
+.zou-section__head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.zou-section__title { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 0.375rem; }
+.zou-section__title .zou-icon { color: var(--zou-accent); font-size: 1rem; }
+.zou-section__more { color: var(--zou-sub); font-size: 0.75rem; display: flex; align-items: center; gap: 0.125rem; }
+
+.zou-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+  height: 2.5rem; padding: 0 1.25rem;
+  border-radius: var(--zou-radius);
+  background: var(--zou-accent); color: #fff;
+  font-size: 0.9375rem; font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+.zou-btn:active { transform: scale(0.96); opacity: 0.9; }
+.zou-btn--ghost { background: transparent; border: 0.0625rem solid var(--zou-accent); color: var(--zou-accent); }
+.zou-btn--block { width: 100%; }
+.zou-btn--disabled { opacity: 0.4; pointer-events: none; }
+
+.zou-tag {
+  display: inline-block; padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem; font-size: 0.6875rem;
+  background: rgba(255, 127, 41, 0.14); color: var(--zou-accent);
+}
+.zou-score { color: var(--zou-accent); font-weight: 700; }
+
+.zou-empty { text-align: center; color: var(--zou-sub); padding: 3rem 0; font-size: 0.8125rem; }
+.zou-empty .zou-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; opacity: 0.4; }
+
+/* 加载动画（animation 使用处之一） */
+.zou-loading { text-align: center; color: var(--zou-sub); padding: 1.5rem 0; font-size: 0.75rem; }
+.zou-loading .zou-icon { display: inline-block; animation: zou-spin 1s linear infinite; }
+@keyframes zou-spin { to { transform: rotate(360deg); } }
+
+/* toast 提示 */
+.zou-toast {
+  position: fixed; left: 50%; bottom: 22%; z-index: 300;
+  transform: translateX(-50%);
+  padding: 0.625rem 1.125rem;
+  background: rgba(20, 28, 46, 0.95); border: 0.0625rem solid var(--zou-line);
+  border-radius: 0.5rem; font-size: 0.8125rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+  animation: zou-fade-up 0.25s ease;
+  max-width: 70vw; text-align: center;
+}
+
+/* ========== 5. 首页：canvas 粒子背景 + 轮播 ========== */
+.zou-canvas-bg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.zou-hero { position: relative; overflow: hidden; padding-bottom: 0.75rem; }
+
+.zou-carousel { position: relative; margin: calc(var(--zou-header-h)) 0.875rem 0; border-radius: var(--zou-radius); overflow: hidden; }
+.zou-carousel__track { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+.zou-carousel__item { flex: 0 0 100%; position: relative; }
+.zou-carousel__item img { width: 100%; height: 11.25rem; object-fit: cover; }
+.zou-carousel__caption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 1.75rem 0.875rem 0.625rem;
+  background: linear-gradient(transparent, rgba(5, 8, 15, 0.85));
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.zou-carousel__title { font-size: 0.9375rem; font-weight: 600; }
+.zou-carousel__meta { font-size: 0.6875rem; color: var(--zou-sub); margin-top: 0.125rem; }
+.zou-carousel__dots { position: absolute; right: 0.75rem; bottom: 0.75rem; display: flex; gap: 0.375rem; }
+.zou-carousel__dot {
+  width: 0.375rem; height: 0.375rem; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.zou-carousel__dot--active { background: var(--zou-accent); width: 1rem; border-radius: 0.1875rem; animation: zou-breathe 1.8s ease-in-out infinite; }
+/* 动画2：指示点呼吸 animation */
+@keyframes zou-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 127, 41, 0.5); }
+  50% { box-shadow: 0 0 0 0.3rem rgba(255, 127, 41, 0.18); }
+}
+
+/* 频道金刚区 */
+.zou-channel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; padding: 0.875rem; }
+.zou-channel__item { display: flex; flex-direction: column; align-items: center; gap: 0.375rem; font-size: 0.75rem; color: var(--zou-text); transition: transform 0.15s ease; }
+.zou-channel__item:active { transform: scale(0.92); }
+.zou-channel__icon {
+  width: 2.75rem; height: 2.75rem; border-radius: 0.875rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; color: #fff;
+  background: linear-gradient(135deg, var(--zou-card2), var(--zou-card));
+  border: 0.0625rem solid var(--zou-line);
+}
+.zou-channel__item:nth-child(1) .zou-channel__icon { color: #6ea0ff; }
+.zou-channel__item:nth-child(2) .zou-channel__icon { color: #c88bff; }
+.zou-channel__item:nth-child(3) .zou-channel__icon { color: #4fd8b0; }
+.zou-channel__item:nth-child(4) .zou-channel__icon { color: #ffb054; }
+.zou-channel__item:nth-child(5) .zou-channel__icon { color: #63c8f5; }
+
+/* 瀑布卡片列表（两列） */
+.zou-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 0 0.875rem; }
+.zou-card {
+  background: var(--zou-card); border-radius: var(--zou-radius); overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;    /* 动画3：卡片按压/悬停 transition */
+  animation: zou-fade-up 0.4s ease both;
+}
+.zou-card:active { transform: scale(0.97); }
+@media (hover: hover) { .zou-card:hover { transform: translateY(-0.25rem); box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.45); } }
+.zou-card__cover { position: relative; }
+.zou-card__cover img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.zou-card__score {
+  position: absolute; right: 0.375rem; top: 0.375rem;
+  padding: 0.0625rem 0.375rem; border-radius: 0.25rem;
+  background: rgba(5, 8, 15, 0.65); font-size: 0.6875rem; color: var(--zou-accent); font-weight: 700;
+}
+.zou-card__plays {
+  position: absolute; left: 0.375rem; bottom: 0.375rem;
+  display: flex; align-items: center; gap: 0.125rem;
+  font-size: 0.625rem; color: rgba(255, 255, 255, 0.85);
+}
+.zou-card__info { padding: 0.5rem 0.625rem 0.625rem; }
+.zou-card__title { font-size: 0.8125rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zou-card__desc { font-size: 0.6875rem; color: var(--zou-sub); margin-top: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+@keyframes zou-fade-up { from { opacity: 0; transform: translateY(0.75rem); } to { opacity: 1; transform: none; } }
+
+/* ========== 6. 列表页：分类 tab + 分页 ========== */
+.zou-tabs { display: flex; gap: 0.25rem; padding: 0.625rem 0.875rem; position: sticky; top: var(--zou-header-h); z-index: 50; background: rgba(11, 17, 31, 0.95); overflow-x: auto; }
+.zou-tabs__item { flex-shrink: 0; padding: 0.375rem 0.875rem; border-radius: 1rem; font-size: 0.8125rem; color: var(--zou-sub); background: var(--zou-card); transition: all 0.25s ease; }
+.zou-tabs__item.zou-tabs__item--active { background: var(--zou-accent); color: #fff; font-weight: 600; }
+
+.zou-pagination { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem 0; }
+.zou-pagination__btn { min-width: 2.125rem; height: 2.125rem; padding: 0 0.5rem; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem; background: var(--zou-card); color: var(--zou-sub); font-size: 0.8125rem; transition: all 0.2s ease; }
+.zou-pagination__btn--disabled { opacity: 0.35; pointer-events: none; }
+.zou-pagination__num { font-size: 0.75rem; color: var(--zou-sub); }
+.zou-pagination__num b { color: var(--zou-accent); }
+
+/* ========== 7. 详情页 ========== */
+.zou-detail-hero { position: relative; }
+.zou-detail-hero__poster { width: 100%; height: 15rem; object-fit: cover; filter: brightness(0.55); }
+.zou-detail-hero__play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 3.5rem; height: 3.5rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 127, 41, 0.9); color: #fff; font-size: 1.5rem;
+  box-shadow: 0 0 0 0.5rem rgba(255, 127, 41, 0.25);
+  animation: zou-breathe 1.8s ease-in-out infinite;
+}
+.zou-detail-hero__back {
+  position: absolute; left: 0.75rem; top: calc(var(--zou-header-h) - 2.25rem);
+  width: 2rem; height: 2rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(5, 8, 15, 0.5); color: #fff; font-size: 1rem;
+}
+.zou-detail-info { padding: 0.875rem; margin-top: -2rem; position: relative; z-index: 2; }
+.zou-detail-info__title { font-size: 1.25rem; font-weight: 700; }
+.zou-detail-info__meta { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 0.5rem 0; font-size: 0.75rem; color: var(--zou-sub); }
+.zou-detail-info__row { font-size: 0.8125rem; color: var(--zou-sub); line-height: 1.6; margin-top: 0.25rem; }
+.zou-detail-info__row b { color: var(--zou-text); font-weight: 500; }
+
+.zou-panel { margin: 0.875rem; background: var(--zou-card); border-radius: var(--zou-radius); padding: 0.875rem; }
+.zou-panel__title { font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.625rem; display: flex; align-items: center; justify-content: space-between; }
+.zou-panel__title .zou-icon { color: var(--zou-accent); margin-right: 0.375rem; }
+
+/* AI 简介面板 */
+.zou-ai-box__text { font-size: 0.8125rem; line-height: 1.7; color: #d6dceb; }
+.zou-ai-box__text.zou-ai-box__text--loading { animation: zou-blink 1s ease-in-out infinite; }
+@keyframes zou-blink { 50% { opacity: 0.45; } }
+.zou-ai-box__foot { display: flex; align-items: center; justify-content: space-between; margin-top: 0.625rem; font-size: 0.6875rem; color: var(--zou-sub); }
+.zou-ai-badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.5rem; border-radius: 0.75rem; background: rgba(79, 124, 240, 0.15); color: var(--zou-blue); font-size: 0.625rem; }
+
+/* AI 客服悬浮按钮 + 对话框 */
+.zou-fab {
+  position: fixed; right: 0.875rem; bottom: calc(var(--zou-tabbar-h) + 1rem); z-index: 120;
+  width: 3rem; height: 3rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--zou-blue), #7c5cff);
+  color: #fff; font-size: 1.375rem;
+  box-shadow: 0 0.375rem 1.25rem rgba(79, 124, 240, 0.4);
+  transition: transform 0.2s ease;
+}
+.zou-fab:active { transform: scale(0.9); }
+.zou-chat-mask, .zou-modal-mask {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(5, 8, 15, 0.6);
+  display: none; align-items: flex-end; justify-content: center;
+}
+.zou-chat-mask.zou-show, .zou-modal-mask.zou-show { display: flex; animation: zou-fade-in 0.25s ease; }
+@keyframes zou-fade-in { from { opacity: 0; } }
+.zou-chat {
+  width: 100%; max-width: 480px; height: 70vh;
+  background: var(--zou-bg); border-radius: 1rem 1rem 0 0;
+  display: flex; flex-direction: column;
+  animation: zou-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes zou-slide-up { from { transform: translateY(100%); } }
+.zou-chat__head { padding: 0.875rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 0.0625rem solid var(--zou-line); font-weight: 700; }
+.zou-chat__body { flex: 1; overflow-y: auto; padding: 0.875rem; display: flex; flex-direction: column; gap: 0.625rem; }
+.zou-chat__msg { max-width: 80%; padding: 0.5rem 0.75rem; border-radius: 0.75rem; font-size: 0.8125rem; line-height: 1.6; animation: zou-fade-up 0.25s ease; }
+.zou-chat__msg--ai { align-self: flex-start; background: var(--zou-card2); border-top-left-radius: 0.125rem; }
+.zou-chat__msg--me { align-self: flex-end; background: var(--zou-accent); color: #fff; border-top-right-radius: 0.125rem; }
+.zou-chat__foot { padding: 0.625rem 0.875rem; border-top: 0.0625rem solid var(--zou-line); display: flex; gap: 0.5rem; }
+.zou-chat__input { flex: 1; height: 2.25rem; padding: 0 0.75rem; background: var(--zou-card2); border-radius: 1.125rem; font-size: 0.8125rem; }
+.zou-chat__send { width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--zou-accent); color: #fff; display: flex; align-items: center; justify-content: center; }
+
+/* 评论 */
+.zou-comment { display: flex; gap: 0.625rem; padding: 0.625rem 0; border-bottom: 0.0625rem solid var(--zou-line); }
+.zou-comment:last-child { border-bottom: none; }
+.zou-comment__avatar { width: 2.125rem; height: 2.125rem; border-radius: 50%; flex-shrink: 0; }
+.zou-comment__name { font-size: 0.75rem; color: var(--zou-sub); }
+.zou-comment__content { font-size: 0.8125rem; line-height: 1.6; margin-top: 0.25rem; }
+.zou-comment__time { font-size: 0.625rem; color: var(--zou-sub); margin-top: 0.25rem; }
+
+/* 相关推荐横滑 */
+.zou-scroll-x { display: flex; gap: 0.625rem; overflow-x: auto; padding-bottom: 0.25rem; }
+.zou-scroll-x .zou-card { flex: 0 0 6.5rem; }
+
+/* ========== 8. 搜索页 ========== */
+.zou-searchbar { display: flex; align-items: center; gap: 0.625rem; padding: 0.625rem 0.875rem; position: sticky; top: 0; background: var(--zou-bg); z-index: 90; }
+.zou-searchbar__input { flex: 1; height: 2.375rem; padding: 0 0.875rem; background: var(--zou-card2); border-radius: 1.25rem; font-size: 0.875rem; }
+.zou-searchbar__input::placeholder { color: var(--zou-sub); }
+.zou-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.zou-chip { padding: 0.375rem 0.875rem; background: var(--zou-card); border-radius: 1rem; font-size: 0.75rem; color: var(--zou-sub); transition: all 0.2s ease; }
+.zou-chip:active { background: var(--zou-accent); color: #fff; }
+.zou-chip-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.625rem; font-size: 0.875rem; font-weight: 700; }
+.zou-chip-head .zou-icon { color: var(--zou-sub); font-size: 0.875rem; padding: 0.25rem; }
+
+/* ========== 9. 排行榜 ========== */
+.zou-rank-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.875rem; transition: background 0.2s ease; }
+.zou-rank-item:active { background: var(--zou-card2); }
+.zou-rank-item__no { width: 1.5rem; text-align: center; font-size: 1rem; font-weight: 800; font-style: italic; color: var(--zou-sub); }
+.zou-rank-item:nth-child(1) .zou-rank-item__no { color: #ff4747; }
+.zou-rank-item:nth-child(2) .zou-rank-item__no { color: #ff8b2c; }
+.zou-rank-item:nth-child(3) .zou-rank-item__no { color: #ffc12c; }
+.zou-rank-item__cover { width: 3.25rem; height: 4.375rem; border-radius: 0.375rem; object-fit: cover; }
+.zou-rank-item__info { flex: 1; min-width: 0; }
+.zou-rank-item__title { font-size: 0.875rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zou-rank-item__meta { font-size: 0.6875rem; color: var(--zou-sub); margin-top: 0.375rem; display: flex; gap: 0.5rem; align-items: center; }
+.zou-rank-item__plays { display: flex; align-items: center; gap: 0.25rem; color: var(--zou-accent); font-size: 0.75rem; font-weight: 600; }
+
+/* ========== 10. 登录 / 注册 ========== */
+.zou-auth { min-height: 100vh; padding: 3rem 1.75rem 0; position: relative; overflow: hidden; }
+.zou-auth__title { font-size: 1.5rem; font-weight: 800; margin: 2rem 0 0.375rem; }
+.zou-auth__sub { color: var(--zou-sub); font-size: 0.8125rem; margin-bottom: 2rem; }
+.zou-form-item { margin-bottom: 1.125rem; }
+.zou-form-item__label { font-size: 0.8125rem; color: var(--zou-sub); margin-bottom: 0.5rem; display: block; }
+.zou-input-wrap {
+  display: flex; align-items: center; gap: 0.5rem;
+  height: 3rem; padding: 0 0.875rem;
+  background: var(--zou-card); border-radius: var(--zou-radius);
+  border: 0.0625rem solid transparent;
+  transition: border-color 0.25s ease;
+}
+.zou-input-wrap:focus-within { border-color: var(--zou-accent); }
+.zou-input-wrap .zou-icon { color: var(--zou-sub); font-size: 1rem; }
+.zou-input { flex: 1; height: 100%; font-size: 0.9375rem; background: none; }
+.zou-input::placeholder { color: #5a6377; }
+.zou-input-eye { color: var(--zou-sub); padding: 0.25rem; }
+.zou-form-err { font-size: 0.6875rem; color: #ff6161; margin-top: 0.375rem; min-height: 1rem; }
+.zou-canvas-captcha { border-radius: 0.375rem; cursor: pointer; }
+.zou-form-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--zou-sub); margin: 0.75rem 0 1.25rem; }
+.zou-form-row a { color: var(--zou-accent); }
+.zou-auth__switch { text-align: center; margin-top: 1.5rem; font-size: 0.8125rem; color: var(--zou-sub); }
+.zou-auth__switch a { color: var(--zou-accent); font-weight: 600; }
+
+/* ========== 11. 个人中心 ========== */
+.zou-profile-head {
+  position: relative; padding: calc(var(--zou-header-h) + 1.25rem) 1.25rem 1.5rem;
+  background: linear-gradient(180deg, rgba(79, 124, 240, 0.12), transparent);
+  display: flex; align-items: center; gap: 1rem;
+}
+.zou-profile-head__avatar { width: 4rem; height: 4rem; border-radius: 50%; border: 0.125rem solid rgba(255, 255, 255, 0.15); }
+.zou-profile-head__name { font-size: 1.125rem; font-weight: 700; }
+.zou-profile-head__uid { font-size: 0.6875rem; color: var(--zou-sub); margin-top: 0.375rem; }
+.zou-stat-row { display: flex; margin: 0 0.875rem; background: var(--zou-card); border-radius: var(--zou-radius); padding: 0.875rem 0; }
+.zou-stat-item { flex: 1; text-align: center; }
+.zou-stat-item__num { font-size: 1.125rem; font-weight: 800; color: var(--zou-accent); }
+.zou-stat-item__label { font-size: 0.6875rem; color: var(--zou-sub); margin-top: 0.25rem; }
+.zou-cell { display: flex; align-items: center; gap: 0.75rem; padding: 0.9375rem 1.25rem; background: var(--zou-card); border-bottom: 0.0625rem solid var(--zou-line); transition: background 0.2s ease; }
+.zou-cell:active { background: var(--zou-card2); }
+.zou-cell .zou-icon { font-size: 1.125rem; color: var(--zou-accent); }
+.zou-cell__title { flex: 1; font-size: 0.875rem; }
+.zou-cell__arrow { color: var(--zou-sub); font-size: 0.875rem; }
+.zou-cell-group { margin: 0.875rem; border-radius: var(--zou-radius); overflow: hidden; }
+.zou-cell-group .zou-cell:last-child { border-bottom: none; }
+
+/* ========== 12. 后台管理 ========== */
+.zou-admin-wrap { max-width: 720px; margin: 0 auto; }
+.zou-admin-head { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem; position: sticky; top: 0; background: rgba(11, 17, 31, 0.95); z-index: 90; }
+.zou-stat-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.625rem; padding: 0 0.875rem; }
+@media (min-width: 640px) { .zou-stat-cards { grid-template-columns: repeat(4, 1fr); } }
+.zou-stat-card { background: var(--zou-card); border-radius: var(--zou-radius); padding: 0.875rem; border: 0.0625rem solid var(--zou-line); }
+.zou-stat-card__num { font-size: 1.375rem; font-weight: 800; color: var(--zou-accent); }
+.zou-stat-card__label { font-size: 0.6875rem; color: var(--zou-sub); margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem; }
+.zou-chart-box { background: var(--zou-card); border-radius: var(--zou-radius); margin: 0.875rem; padding: 0.875rem; border: 0.0625rem solid var(--zou-line); }
+.zou-chart { width: 100%; height: 14rem; }
+
+.zou-table-wrap { margin: 0 0.875rem; background: var(--zou-card); border-radius: var(--zou-radius); overflow: hidden; border: 0.0625rem solid var(--zou-line); }
+.zou-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.zou-table th { background: var(--zou-card2); color: var(--zou-sub); font-weight: 600; text-align: left; padding: 0.625rem 0.5rem; white-space: nowrap; }
+.zou-table td { padding: 0.5rem; border-top: 0.0625rem solid var(--zou-line); vertical-align: middle; }
+.zou-table img { width: 2.5rem; height: 3.25rem; border-radius: 0.25rem; object-fit: cover; }
+.zou-table__actions { display: flex; gap: 0.375rem; }
+.zou-mini-btn { padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.6875rem; display: inline-flex; align-items: center; gap: 0.125rem; transition: opacity 0.2s ease; }
+.zou-mini-btn:active { opacity: 0.7; }
+.zou-mini-btn--edit { background: rgba(79, 124, 240, 0.16); color: var(--zou-blue); }
+.zou-mini-btn--del { background: rgba(255, 97, 97, 0.16); color: #ff6161; }
+
+.zou-toolbar { display: flex; align-items: center; gap: 0.5rem; padding: 0 0.875rem 0.75rem; }
+.zou-toolbar .zou-searchbar__input { height: 2.125rem; }
+.zou-modal {
+  width: 92%; max-width: 26rem; max-height: 82vh; overflow-y: auto;
+  background: var(--zou-card); border-radius: 0.875rem; padding: 1.125rem;
+  align-self: center;
+  animation: zou-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.zou-modal__title { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
+.zou-modal__foot { display: flex; gap: 0.625rem; margin-top: 1.25rem; }
+.zou-modal__foot .zou-btn { flex: 1; height: 2.375rem; }
+
+.zou-admin-tabs { display: flex; padding: 0 0.875rem 0.625rem; gap: 0.375rem; }
+.zou-admin-tabs .zou-tabs__item { display: flex; align-items: center; gap: 0.25rem; }
+
+/* 返回顶部 */
+.zou-backtop {
+  position: fixed; right: 0.875rem; bottom: calc(var(--zou-tabbar-h) + 4.5rem); z-index: 110;
+  width: 2.5rem; height: 2.5rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(20, 28, 46, 0.9); border: 0.0625rem solid var(--zou-line);
+  color: var(--zou-sub); font-size: 1rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.zou-backtop.zou-show { opacity: 1; pointer-events: auto; }
+.zou-backtop:active { transform: scale(0.9); }
+
+/* ========== 13. 页脚 ========== */
+.zou-footer { text-align: center; color: #566078; font-size: 0.6875rem; line-height: 1.8; padding: 1.5rem 0 0.5rem; }

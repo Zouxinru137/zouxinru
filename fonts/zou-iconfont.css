@@ -1,0 +1,30 @@
+/* zou-iconfont.css —— 自制图标字体（邹欣茹 24002120217 2026-11-27） */
+@font-face {
+  font-family: 'zou-iconfont';
+  src: url('zou-iconfont.ttf') format('truetype');
+  font-display: block;
+}
+.zou-icon {
+  font-family: 'zou-iconfont' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+}
+.zou-icon-home:before { content: '\e000'; }
+.zou-icon-play:before { content: '\e001'; }
+.zou-icon-search:before { content: '\e002'; }
+.zou-icon-user:before { content: '\e003'; }
+.zou-icon-star:before { content: '\e004'; }
+.zou-icon-fire:before { content: '\e005'; }
+.zou-icon-film:before { content: '\e006'; }
+.zou-icon-tv:before { content: '\e007'; }
+.zou-icon-heart:before { content: '\e008'; }
+.zou-icon-arrow:before { content: '\e009'; }
+.zou-icon-close:before { content: '\e00a'; }
+.zou-icon-chat:before { content: '\e00b'; }
+.zou-icon-plus:before { content: '\e00c'; }
+.zou-icon-edit:before { content: '\e00d'; }
+.zou-icon-trash:before { content: '\e00e'; }
+.zou-icon-chart:before { content: '\e00f'; }
+.zou-icon-history:before { content: '\e010'; }
+.zou-icon-grid:before { content: '\e011'; }
+.zou-icon-vip:before { content: '\e012'; }
